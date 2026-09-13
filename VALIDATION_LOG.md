@@ -1,5 +1,37 @@
 # Journal de validation — Mini
 
+## 2026-09-13 — Premier essai local
+
+- Départ : `54012afa3438f4f90396425c2c4055808e575375`, main propre.
+- Rapport reproductible : `validation/2026-09-13-ollama.json`, requêtes, réponses,
+  version, paramètres, empreinte du modèle conservés avec cette documentation.
+- Inventaire CIM réussi après autorisation hors sandbox : Ryzen 5 5600H,
+  16 483 872 768 octets RAM, Windows 11 10.0.26200 ; environ 4 Go RAM libres.
+- NVIDIA : RTX 3050 Laptop, 4096 MiB VRAM, pilote 616.64.
+- Ollama 0.33.3 préinstallé, aucun modèle initial ; la commande list a démarré
+  automatiquement le service. Mise à jour signalée, non appliquée volontairement.
+- Téléchargement autorisé `ollama pull qwen3.5:2b` : réussi, 2,7 Go.
+- Première commande d'essai : erreur PowerShell sur une apostrophe typographique,
+  avant toute requête ; commande corrigée puis exécutée avec succès.
+- Trois appels API chat, température 0, think=false, contexte 4096, plafond 128 tokens.
+- Salutation française attendue : obtenu « Bonjour ! », réussi, total 66,36 s,
+  dont chargement 45,21 s et traitement du prompt 21,05 s.
+- Extraction attendue `18:30` : obtenu `18:30`, réussi, 0,38 s.
+- Calcul attendu `42` : obtenu `42`, réussi, 0,27 s.
+- Débits de génération : 32,12 / 39,62 / 42,39 tokens/s ; ne mesurent pas le premier token.
+- Ollama ps : 3,0 Go, CPU/GPU 37 %/63 %, maintien en mémoire temporaire cinq minutes.
+- Limites : trois requêtes fictives sans outils ; aucun compte ni API distante,
+  aucune validation Hermes, mémoire, pet ou tâches longues.
+- Repo : documentation et preuve modifiées ; installation locale du modèle faite ;
+  validation locale des trois scénarios réussie ; production applicative non applicable.
+
+Sources officielles consultées :
+- https://ollama.com/library/qwen3.5:2b
+- https://docs.ollama.com/api/chat
+- https://docs.ollama.com/integrations/hermes (connexion locale sur le port 11434).
+- https://hermes-agent.nousresearch.com/docs/getting-started/installation (Windows natif disponible, installation non exécutée).
+- https://api-docs.deepseek.com/ (aucun appel authentifié effectué).
+
 ## 2026-09-13 — Initialisation documentaire
 
 ### Périmètre et état

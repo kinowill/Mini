@@ -1,0 +1,172 @@
+﻿{
+    "version":  {
+                    "version":  "0.33.3"
+                },
+    "loaded":  {
+                   "models":  [
+                                  {
+                                      "name":  "qwen3.5:2b",
+                                      "model":  "qwen3.5:2b",
+                                      "size":  2953796643,
+                                      "digest":  "324d162be6ca5629ae4517c8710434d0bd2d665bc94dbad46e9af8fbf8a2f0df",
+                                      "details":  {
+                                                      "parent_model":  "",
+                                                      "format":  "gguf",
+                                                      "family":  "qwen35",
+                                                      "families":  [
+                                                                       "qwen35"
+                                                                   ],
+                                                      "parameter_size":  "2.3B",
+                                                      "quantization_level":  "Q8_0"
+                                                  },
+                                      "expires_at":  "2026-09-13T15:43:03.2855347+02:00",
+                                      "size_vram":  1854836569,
+                                      "context_length":  4096
+                                  }
+                              ]
+               },
+    "cases":  [
+                  {
+                      "tokens_per_second":  32.12,
+                      "request":  {
+                                      "messages":  [
+                                                       {
+                                                           "content":  "Dis bonjour en français en une phrase courte.",
+                                                           "role":  "user"
+                                                       }
+                                                   ],
+                                      "stream":  false,
+                                      "keep_alive":  "5m",
+                                      "think":  false,
+                                      "model":  "qwen3.5:2b",
+                                      "options":  {
+                                                      "temperature":  0,
+                                                      "num_predict":  128,
+                                                      "num_ctx":  4096
+                                                  }
+                                  },
+                      "response":  {
+                                       "model":  "qwen3.5:2b",
+                                       "created_at":  "2026-09-13T13:38:02.5349973Z",
+                                       "message":  {
+                                                       "role":  "assistant",
+                                                       "content":  "Bonjour !"
+                                                   },
+                                       "done":  true,
+                                       "done_reason":  "stop",
+                                       "total_duration":  66361961600,
+                                       "load_duration":  45212066800,
+                                       "prompt_eval_count":  22,
+                                       "prompt_eval_cached_count":  0,
+                                       "prompt_eval_duration":  21045007000,
+                                       "eval_count":  3,
+                                       "eval_duration":  93398000
+                                   }
+                  },
+                  {
+                      "tokens_per_second":  39.62,
+                      "request":  {
+                                      "messages":  [
+                                                       {
+                                                           "content":  "Extrais uniquement au format HH:MM : rappelle-moi de sortir à 18h30.",
+                                                           "role":  "user"
+                                                       }
+                                                   ],
+                                      "stream":  false,
+                                      "keep_alive":  "5m",
+                                      "think":  false,
+                                      "model":  "qwen3.5:2b",
+                                      "options":  {
+                                                      "temperature":  0,
+                                                      "num_predict":  128,
+                                                      "num_ctx":  4096
+                                                  }
+                                  },
+                      "response":  {
+                                       "model":  "qwen3.5:2b",
+                                       "created_at":  "2026-09-13T13:38:03.0119628Z",
+                                       "message":  {
+                                                       "role":  "assistant",
+                                                       "content":  "18:30"
+                                                   },
+                                       "done":  true,
+                                       "done_reason":  "stop",
+                                       "total_duration":  384384800,
+                                       "load_duration":  3636700,
+                                       "prompt_eval_count":  34,
+                                       "prompt_eval_cached_count":  0,
+                                       "prompt_eval_duration":  212398000,
+                                       "eval_count":  6,
+                                       "eval_duration":  151444000
+                                   }
+                  },
+                  {
+                      "tokens_per_second":  42.39,
+                      "request":  {
+                                      "messages":  [
+                                                       {
+                                                           "content":  "Réponds uniquement par le résultat : 17 + 25.",
+                                                           "role":  "user"
+                                                       }
+                                                   ],
+                                      "stream":  false,
+                                      "keep_alive":  "5m",
+                                      "think":  false,
+                                      "model":  "qwen3.5:2b",
+                                      "options":  {
+                                                      "temperature":  0,
+                                                      "num_predict":  128,
+                                                      "num_ctx":  4096
+                                                  }
+                                  },
+                      "response":  {
+                                       "model":  "qwen3.5:2b",
+                                       "created_at":  "2026-09-13T13:38:03.2855347Z",
+                                       "message":  {
+                                                       "role":  "assistant",
+                                                       "content":  "42"
+                                                   },
+                                       "done":  true,
+                                       "done_reason":  "stop",
+                                       "total_duration":  272007700,
+                                       "load_duration":  2615600,
+                                       "prompt_eval_count":  28,
+                                       "prompt_eval_cached_count":  0,
+                                       "prompt_eval_duration":  183389000,
+                                       "eval_count":  3,
+                                       "eval_duration":  70765000
+                                   }
+                  }
+              ],
+    "date":  "2026-09-13T15:38:03.2903504+02:00",
+    "base_commit":  "54012afa3438f4f90396425c2c4055808e575375",
+    "models":  {
+                   "models":  [
+                                  {
+                                      "name":  "qwen3.5:2b",
+                                      "model":  "qwen3.5:2b",
+                                      "modified_at":  "2026-09-13T15:36:31.595584+02:00",
+                                      "size":  2741192820,
+                                      "digest":  "324d162be6ca5629ae4517c8710434d0bd2d665bc94dbad46e9af8fbf8a2f0df",
+                                      "details":  {
+                                                      "parent_model":  "",
+                                                      "format":  "gguf",
+                                                      "family":  "qwen35",
+                                                      "families":  [
+                                                                       "qwen35"
+                                                                   ],
+                                                      "parameter_size":  "2.3B",
+                                                      "quantization_level":  "Q8_0",
+                                                      "context_length":  262144,
+                                                      "embedding_length":  2048
+                                                  },
+                                      "capabilities":  [
+                                                           "vision",
+                                                           "completion",
+                                                           "tools",
+                                                           "thinking"
+                                                       ]
+                                  }
+                              ]
+               }
+}

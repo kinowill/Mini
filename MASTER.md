@@ -11,7 +11,7 @@ L'identité, la mémoire et les procédures doivent persister quand le modèle c
 ## État courant
 
 - Projet au stade du cadrage : cahier des charges et documentation, aucun code applicatif.
-- Aucun moteur, modèle ou service installé ou testé dans le cadre de ce chantier.
+- Ollama 0.33.3 préinstallé, service démarré pendant l'inventaire ; Qwen 3.5 2B téléchargé et trois requêtes simples réussies. Hermes et DeepSeek non testés.
 - Socle documentaire publié sur https://github.com/kinowill/Mini (`main`, commit initial `043bc53`) ; synchronisation vérifiée, preuves dans `VALIDATION_LOG.md`.
 
 ## Choix et pistes
@@ -27,7 +27,9 @@ L'identité, la mémoire et les procédures doivent persister quand le modèle c
 
 Environnement de travail observé : Windows, PowerShell, Git et GitHub CLI disponibles.
 Machine décrite dans le cahier des charges : Ryzen 5 5600H, 16 Go RAM,
-RTX 3050 Laptop, Windows 11. Matériel non contrôlé ; VRAM disponible inconnue.
+RTX 3050 Laptop, Windows 11 : matériel confirmé, 4 Go VRAM et environ 16 Go RAM.
+Environ 4 Go RAM libres à l'inventaire. Ubuntu WSL2 présent et arrêté.
+Commande Hermes absente du PATH Windows ; autres installations non exclues.
 Stack envisagée : Hermes, Ollama, API distante et interface de bureau.
 Versions, mode d'exécution d'Hermes sur Windows et technologie du pet à vérifier.
 
@@ -44,10 +46,11 @@ Il n'existe encore ni code applicatif, ni migration, ni déploiement.
 
 ## Prochain chantier
 
-Vérifier le matériel et la présence d'Ollama/Hermes, puis consulter leurs sources
-officielles actuelles pour préparer un premier essai local reproductible.
-Choisir le petit modèle à partir des ressources constatées et d'un essai mesuré.
-Vérifier ensuite l'intégration DeepSeek avant de construire l'interface des pets.
+Préparer Hermes natif Windows et son raccordement à Ollama avant DeepSeek.
+Qwen 3.5 2B reste un candidat : premier appel 66,36 s (dont 45,21 s de chargement),
+puis 0,38 et 0,27 s ; 32–42 tokens/s, contexte 4096, partage CPU/GPU 37 %/63 %.
+Ces essais courts ne valident ni les tâches longues, ni les outils, ni la mémoire.
+Preuve : `validation/2026-09-13-ollama.json`.
 
 ## Limites à préserver
 

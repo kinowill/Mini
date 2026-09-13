@@ -15,8 +15,8 @@ Deux pets sont envisagés ; leur fonctionnement reste à définir.
 - [Cahier des charges initial](projet_jarvis_hermes_agent.txt) : vision complète.
 - [Instructions locales](AGENTS.md) : cadre de travail du projet.
 
-Prochaine étape : vérifier l'environnement et préparer un premier essai de modèle
-local adapté à la machine, avant l'intégration Hermes et DeepSeek.
+Premier essai local Qwen 3.5 2B : trois réponses simples correctes.
+Prochaine étape : intégration Hermes puis DeepSeek. Voir le journal de validation.
 
 Le protocole de travail complet est chargé globalement sur la machine de travail.
 `AGENTS.md` contient uniquement les compléments propres à Mini.
