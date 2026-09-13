@@ -15,8 +15,9 @@ Deux pets sont envisagés ; leur fonctionnement reste à définir.
 - [Cahier des charges initial](projet_jarvis_hermes_agent.txt) : vision complète.
 - [Instructions locales](AGENTS.md) : cadre de travail du projet.
 
-Premier essai local Qwen 3.5 2B : trois réponses simples correctes.
-Prochaine étape : intégration Hermes puis DeepSeek. Voir le journal de validation.
+Qwen 3.5 2B et Hermes sont maintenant reliés et leur premier échange local est
+validé à 64K. Prochaine étape : éprouver les appels d'outils avant de construire
+les pets. DeepSeek reste désactivé ; voir [PRIVACY.md](PRIVACY.md).
 
 Le protocole de travail complet est chargé globalement sur la machine de travail.
 `AGENTS.md` contient uniquement les compléments propres à Mini.

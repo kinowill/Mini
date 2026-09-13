@@ -1,5 +1,39 @@
 # Journal de validation — Mini
 
+## 2026-09-13 — Centralisation et installation Hermes locale
+
+- Départ : commit `1c974bbd5ce4ceb70bd42932378fd495e814f85a`, main propre.
+- Modèles déplacés de `C:\Users\ArtLi\.ollama\models` vers
+  `C:\PROJETS\Mini\runtime\ollama\models` après arrêt contrôlé d'Ollama.
+  Taille avant/après : 2 741 193 529 octets ; ancienne source absente.
+- Variables utilisateur définies : `OLLAMA_MODELS`, `HERMES_HOME`,
+  `OLLAMA_CONTEXT_LENGTH=64000`. Ollama redémarré et Qwen retrouvé.
+- Qwen à 64K : réponse `OK`, 13,70 s dont 13,24 s de chargement ; `ollama ps`
+  confirme 64 000 tokens, 3,9 Go, partage CPU/GPU 55 %/45 %.
+- Appel d'outil fictif : Qwen a produit `get_local_time({"city":"Paris"})`
+  avec `finish_reason=tool_calls` ; aucun outil réel exécuté.
+- Hermes Agent 0.21.2 installé sous `runtime/hermes`, révision officielle
+  `476dbfed3a76b85985674dc30e484de79859955f`. Installateur conservé localement,
+  SHA-256 `226C70A90AD47E8A4D34CB11ACA4ECBEB649E2F9B67FBD009EA49791DE2D56F5`.
+- Profil minimal appliqué : endpoint Ollama local, contexte 64K, outils limités
+  à file/skills/terminal/vision ; mémoire, profil utilisateur, compression,
+  checkpoints, routage intelligent et fournisseurs de secours désactivés.
+- Métriques Hermes : collecte et envoi faux. Contrôles de mise à jour passifs
+  et rafraîchissement CUA désactivés.
+- Le diagnostic Hermes valide l'environnement, les paquets et la configuration.
+  Il a été interrompu dès le lancement de 40 contrôles de connectivité externes.
+- Échange intégré Hermes → Ollama réussi : sortie exacte `HERMES LOCAL OK`,
+  session locale `20260913_155931_ca87b4`.
+- L'installateur a ajouté CUA 0.28.1 hors Mini et sa télémétrie était activée
+  par défaut. Télémétrie désactivée, identifiant effacé, autostart absent ;
+  l'installateur signale un runtime incompatible. Environ 54 Mo restent hors Mini.
+- Le programme Ollama installé par Windows reste sous AppData (environ 2,96 Go)
+  pour préserver installation et mises à jour ; ses modèles lourds sont dans Mini.
+- Clé DeepSeek déplacée sans lecture dans `runtime/secrets`, ignoré par Git,
+  non chargée et non utilisée. Aucun appel DeepSeek effectué.
+- Repo modifié : documentation et règles d'exclusion. Runtime local installé et
+  échange validé. Production applicative et pets : non applicables à ce stade.
+
 ## 2026-09-13 — Premier essai local
 
 - Départ : `54012afa3438f4f90396425c2c4055808e575375`, main propre.

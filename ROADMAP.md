@@ -12,15 +12,29 @@ Dernière mise à jour : 2026-09-13.
 
 ## Objectif courant
 
-Établir les sources de vérité, puis préparer la phase 1 du cahier des charges :
-installer Ollama si nécessaire et tester un petit modèle local adapté au PC.
+Valider le socle Hermes local, puis mesurer si Qwen 3.5 2B peut assurer de façon
+fiable les interactions et appels d'outils du petit pet.
 
 ## Prochaines tâches
 
 - [x] Rédiger le document maître factuel et les spécificités locales, sur autorisation de structurer le projet.
 - [x] Vérifier le matériel, Ollama et consulter les prérequis officiels.
 - [x] Télécharger et tester Qwen 3.5 2B ; trois réponses simples correctes, rapport conservé.
-- [ ] Préparer Hermes Windows et vérifier un échange intégré avec Ollama.
+- [x] Installer Hermes Windows dans Mini et vérifier un échange intégré avec Ollama.
+- [ ] Tester plusieurs appels d'outils Hermes sans donnée personnelle.
+- [ ] Concevoir les deux pets et leur démarrage automatique Windows, silencieux et désactivable.
+
+## Centralisation du runtime — critères
+
+- Résultat attendu : modèles Ollama sous `runtime/ollama/models` et installation,
+  mémoire, configuration et skills Hermes sous `runtime/hermes`.
+- À préserver : modèle Qwen téléchargé, dépôt Git léger, installation Ollama
+  Windows réparable et absence de secrets ou mémoires dans GitHub.
+- Contrôles : taille et contenu avant/après, variables utilisateur effectives,
+  redémarrage Ollama, présence du modèle, diagnostic Hermes et échange local.
+- Le programme Ollama peut rester dans son emplacement d'installation Windows :
+  ses données lourdes sont centralisées ; un déplacement manuel du binaire n'est
+  pas retenu car l'installateur et la mise à jour s'appuient sur cet emplacement.
 
 ## Critères de réussite du démarrage
 
@@ -45,6 +59,8 @@ Preuve : `validation/2026-09-13-ollama.json`.
 ## Points en attente
 
 - DeepSeek envisagé pour le modèle distant ; deux pets préférés provisoirement, sans décision sur leurs identités, mémoire ou routage.
+- DeepSeek désactivé : définir une passerelle manuelle minimisant le texte envoyé et excluant mémoire, fichiers et historique.
+- Centralisation restante : environ 2,96 Go de programme Ollama restent dans son emplacement Windows géré ; environ 54 Mo de pilote CUA restent hors Mini.
 - Versions, compatibilité réelle, ressources disponibles et modèle initial à établir ; les exemples du cahier des charges ne valent pas mesure ni validation.
 
 ## Suite prévue dans le cahier des charges

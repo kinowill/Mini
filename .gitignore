@@ -6,6 +6,8 @@ secrets/
 private/
 memory/
 conversations/
+API KEY*.txt
+*API*KEY*.txt
 
 # Dépendances, modèles et sorties locales
 .venv/
@@ -19,3 +21,7 @@ dist/
 build/
 *.log
 .local/
+
+# Runtime local centralisé (modèles, dépendances, mémoire, clés et caches)
+runtime/*
+!runtime/README.md
