@@ -12,7 +12,7 @@ L'identité, la mémoire et les procédures doivent persister quand le modèle c
 
 - Projet au stade du cadrage : cahier des charges et documentation, aucun code applicatif.
 - Aucun moteur, modèle ou service installé ou testé dans le cadre de ce chantier.
-- Dépôt de publication : https://github.com/kinowill/Mini ; suivi de publication dans `VALIDATION_LOG.md`.
+- Socle documentaire publié sur https://github.com/kinowill/Mini (`main`, commit initial `043bc53`) ; synchronisation vérifiée, preuves dans `VALIDATION_LOG.md`.
 
 ## Choix et pistes
 

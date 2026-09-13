@@ -27,8 +27,18 @@ diff relu avant commit et égalité local/distant vérifiée après publication.
 ### États
 
 - Fichiers locaux : socle documentaire rédigé.
-- Publication : en attente au moment de cette rédaction ; résultat consigné après push.
+- Publication : premier commit `043bc53aa86552833ba51bfb89863c2181dc6adb` poussé sur `main` ; égalité avec `refs/heads/main` distante vérifiée par `git ls-remote`, état local propre.
 - Installation du protocole : global existant inchangé ; compléments locaux ajoutés.
 - Chargement : protocole global observé dans cette session ; nouvelle session avec les compléments locaux non testée.
 - Production applicative : non applicable, aucune application.
 - Tests comportementaux, performances, Ollama, Hermes et DeepSeek : non exécutés.
+
+### Résultats documentaires et incidents résolus
+
+- `git diff --staged --check` : réussi ; diff documentaire relu avant le premier commit.
+- Cahier des charges original conservé, sans modification pendant le chantier.
+- Les écritures internes Git bloquées par le sandbox ont nécessité les commandes autorisées hors sandbox.
+- Le premier lancement du script via Bash WSL a échoué sur le chemin Windows,
+  puis sur l'identité Git absente dans WSL. Utilisation de Git Bash Windows avec
+  l'identité existante : commit et push réussis, sans modification globale de configuration.
+- Le présent suivi documentaire complète la preuve du premier commit ; aucun changement applicatif.
