@@ -1,0 +1,21 @@
+# Secrets et données personnelles
+.env
+.env.*
+!.env.example
+secrets/
+private/
+memory/
+conversations/
+
+# Dépendances, modèles et sorties locales
+.venv/
+venv/
+node_modules/
+__pycache__/
+*.pyc
+models/
+*.gguf
+dist/
+build/
+*.log
+.local/

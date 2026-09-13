@@ -1,0 +1,889 @@
+PROJET - ASSISTANT PERSONNEL "JARVIS" LOCAL, VIVANT ET EVOLUTIF
+
+VISION GENERALE
+
+Construire un assistant personnel agentique qui fonctionne comme une sorte de JARVIS personnel.
+
+Il ne doit pas être seulement un chatbot.
+
+L'objectif est d'avoir une entité présente en permanence sur le PC, représentée par un petit "pet" de bureau, par exemple un chat, capable de vivre sa vie, de réagir, d'être appelée à tout moment et d'agir réellement sur l'environnement informatique.
+
+L'assistant doit pouvoir :
+- discuter
+- écouter
+- parler
+- se souvenir
+- apprendre des procédures
+- créer et améliorer ses propres skills
+- utiliser les logiciels
+- manipuler des fichiers
+- utiliser Internet
+- utiliser des comptes connectés
+- agir sur le réseau local
+- lancer des automatisations
+- être contacté à distance
+- prévenir lorsqu'un événement important arrive
+- changer de modèle d'IA sans perdre son identité
+
+
+PRINCIPE CENTRAL
+
+L'assistant ne doit pas être confondu avec le modèle d'IA.
+
+Hermes Agent représente l'entité persistante.
+
+Le modèle est seulement son cerveau du moment.
+
+Ainsi :
+
+Hermes = identité + mémoire + skills + outils + orchestration
+
+Modèle local ou API = cerveau interchangeable
+
+
+ARCHITECTURE PRINCIPALE
+
+Le noyau principal retenu est :
+
+HERMES AGENT
+
+Hermes doit gérer :
+- personnalité
+- mémoire persistante
+- historique
+- skills
+- apprentissage de nouvelles procédures
+- amélioration de skills
+- outils
+- terminal
+- fichiers
+- navigateur
+- automatisations
+- cron
+- intégrations
+- API
+- communication avec les modèles
+- accès aux services autorisés
+
+Architecture globale :
+
+PET DE BUREAU
+      |
+      v
+HERMES AGENT
+      |
+      +-- Mémoire
+      +-- Personnalité
+      +-- Skills
+      +-- Outils
+      +-- Terminal
+      +-- Fichiers
+      +-- Navigateur
+      +-- Automatisations
+      +-- Comptes
+      +-- Réseau local
+      +-- Internet
+      |
+      +-- CERVEAU LOCAL
+      |      |
+      |      +-- Ollama
+      |             |
+      |             +-- Qwen ou autre modèle local
+      |
+      +-- CERVEAU DISTANT
+             |
+             +-- API OpenAI
+             +-- API Anthropic
+             +-- API Gemini
+             +-- OpenRouter
+             +-- DeepSeek
+             +-- autres modèles compatibles
+
+
+POURQUOI HERMES PLUTOT QU'OPENCLAW
+
+OpenClaw reste très intéressant pour construire un assistant personnel local.
+
+Mais Hermes correspond mieux au projet final car l'objectif n'est pas seulement d'avoir un assistant qui exécute des commandes.
+
+Je veux aussi qu'il donne une impression de progression et de continuité.
+
+Hermes est donc retenu pour son orientation vers :
+- mémoire persistante
+- skills réutilisables
+- création de nouvelles procédures
+- amélioration progressive des capacités
+- comportement agentique
+- modèles interchangeables
+- outils extensibles
+- automatisations
+- intégrations multiples
+
+L'idée est que l'assistant puisse apprendre :
+
+"Quand je fais ce type de tâche, cette méthode fonctionne."
+
+Puis conserver cette méthode sous forme de skill réutilisable.
+
+Il ne s'agit pas de modifier automatiquement les poids du modèle neuronal.
+
+Son évolution repose principalement sur :
+- mémoire
+- skills
+- fichiers persistants
+- outils
+- procédures apprises
+- historique
+- nouvelles intégrations
+
+C'est cette accumulation qui doit créer le côté vivant et organique.
+
+
+PET DE BUREAU
+
+L'assistant doit avoir une présence visuelle permanente sur Windows.
+
+Exemple :
+
+un petit chat animé sur le bureau.
+
+Le chat peut :
+- marcher
+- dormir
+- regarder autour de lui
+- réagir à certaines actions
+- afficher différents états
+- venir lorsqu'on l'appelle
+- afficher une bulle
+- signaler une notification
+- montrer qu'une tâche est en cours
+
+Le pet doit rester une interface.
+
+L'intelligence réelle reste dans Hermes.
+
+
+INTERACTIONS AVEC LE PET
+
+Interactions prévues :
+
+CLIC GAUCHE
+- ouvrir une interaction rapide
+- afficher une bulle
+- parler à l'assistant
+
+CLIC DROIT
+- Parler
+- Ecrire une demande
+- Ouvrir l'assistant
+- Voir les tâches
+- Voir les notifications
+- Mémoire
+- Skills
+- Automatisations
+- Historique
+- Mode silencieux
+- Paramètres
+- Quitter
+
+DOUBLE CLIC
+- ouvrir l'interface complète
+
+VOIX
+- activation par mot-clé ou bouton
+- dialogue naturel
+- commandes vocales
+- réponses vocales
+
+
+VOIX
+
+Architecture vocale :
+
+Microphone
+    |
+Speech-to-Text
+    |
+Hermes
+    |
+Modèle
+    |
+Outils / actions
+    |
+Text-to-Speech
+    |
+Voix de l'assistant
+
+Objectif :
+
+pouvoir parler au pet comme à une personne.
+
+Exemples :
+
+"ouvre Spotify"
+
+"cherche ce document"
+
+"envoie-moi ce fichier"
+
+"vérifie mes mails"
+
+"cherche ça sur Internet"
+
+"lance mon projet"
+
+"préviens-moi quand le téléchargement est terminé"
+
+"éteins le PC dans 30 minutes"
+
+"regarde ce qui se passe sur mon serveur"
+
+
+MEMOIRE
+
+La mémoire doit rester persistante indépendamment du modèle utilisé.
+
+L'assistant pourra progressivement connaître :
+- préférences
+- projets
+- habitudes
+- logiciels
+- dossiers importants
+- machines
+- workflows
+- comptes connectés
+- personnes utiles
+- décisions précédentes
+- procédures récurrentes
+- erreurs déjà rencontrées
+- méthodes qui ont fonctionné
+
+Changer de modèle ne doit pas supprimer cette mémoire.
+
+
+PERSONNALITE
+
+L'assistant doit avoir une personnalité persistante et modifiable.
+
+Elle pourra être définie par :
+- fichiers d'identité
+- règles de comportement
+- style de langage
+- comportements
+- habitudes
+- priorités
+- limites
+- préférences
+
+Le pet pourra refléter cette personnalité visuellement.
+
+
+APPRENTISSAGE ET SKILLS
+
+L'un des objectifs centraux du projet est que l'assistant puisse devenir progressivement meilleur.
+
+Exemple :
+
+Je lui demande une tâche nouvelle.
+
+Hermes cherche une méthode.
+
+La méthode fonctionne.
+
+Elle peut être conservée sous forme de skill.
+
+La prochaine fois, Hermes réutilise cette procédure.
+
+Exemples de skills possibles :
+- préparer un projet Python
+- traiter certains fichiers
+- lancer mes logiciels de travail
+- organiser un dossier
+- utiliser une API particulière
+- récupérer certaines données
+- effectuer une routine réseau
+- générer un rapport
+- automatiser un workflow personnel
+
+Les skills pourront évoluer avec le temps.
+
+
+CERVEAU INTERCHANGEABLE
+
+Hermes ne doit jamais dépendre d'un seul modèle.
+
+Exemple :
+
+PET
+ |
+HERMES
+ |
+ +-- Qwen local
+ +-- GPT API
+ +-- Claude API
+ +-- Gemini API
+ +-- DeepSeek API
+ +-- autre modèle futur
+
+Cela permet de changer le cerveau sans perdre :
+- mémoire
+- personnalité
+- skills
+- outils
+- automatisations
+- comptes
+- historique
+- pet
+
+
+MODELE LOCAL
+
+Le premier modèle local prévu est un petit modèle compatible avec le PC actuel.
+
+Exemple :
+
+Qwen 3.5 4B quantifié via Ollama
+
+Utilisation :
+- commandes simples
+- tâches locales
+- tâches privées
+- petits raisonnements
+- classification
+- manipulation de fichiers
+- interaction avec les outils
+- certaines automatisations
+
+Le modèle local ne doit pas obligatoirement tout faire.
+
+
+ARCHITECTURE HYBRIDE
+
+Sur le PC actuel, l'architecture la plus réaliste est hybride.
+
+Exemple :
+
+Tâche simple
+-> modèle local
+
+Tâche privée
+-> modèle local
+
+Commande système
+-> modèle local
+
+Raisonnement complexe
+-> grosse API
+
+Recherche difficile
+-> grosse API
+
+Longue tâche agentique
+-> modèle distant si nécessaire
+
+Hermes reste le même dans tous les cas.
+
+
+ROUTAGE DES MODELES
+
+A terme, Hermes pourra choisir le cerveau approprié selon la tâche.
+
+Exemple :
+
+LOCAL
+- rapide
+- privé
+- gratuit
+- tâches simples
+
+API
+- raisonnement complexe
+- contexte long
+- meilleure fiabilité
+- tâches difficiles
+
+Le but est de garder le maximum en local sans sacrifier la qualité lorsque le petit modèle atteint ses limites.
+
+
+MACHINE ACTUELLE
+
+PC portable :
+- Ryzen 5 5600H
+- 16 Go de RAM
+- RTX 3050 Laptop
+- Windows 11
+
+Cette machine est suffisante pour :
+- Hermes
+- le pet
+- mémoire
+- skills
+- automatisations
+- outils
+- Ollama
+- petit modèle local
+- architecture hybride
+
+Elle n'est pas idéale pour les gros modèles locaux.
+
+
+ZONE DE MODELES REALISTE
+
+3B-4B
+- cible principale
+
+7B-9B
+- éventuellement utilisable
+- plus lent
+- plus lourd
+
+14B+
+- peu adapté à la machine actuelle pour un agent permanent
+
+Le contexte long et les boucles agentiques augmentent fortement les besoins mémoire.
+
+
+BUT DU PC ACTUEL
+
+Le PC actuel sert d'abord à construire l'écosystème définitif.
+
+Il n'est pas nécessaire d'avoir immédiatement le modèle final.
+
+Le travail utile maintenant concerne :
+- Hermes
+- mémoire
+- skills
+- pet
+- outils
+- architecture
+- permissions
+- automatisations
+- accès distant
+- intégrations
+
+Tout cela pourra être conservé plus tard avec un meilleur modèle.
+
+
+CONTROLE DU PC
+
+A terme, Hermes pourra utiliser la machine comme un utilisateur.
+
+Exemples :
+- ouvrir des applications
+- fermer des applications
+- lancer des scripts
+- utiliser PowerShell
+- créer des fichiers
+- déplacer des fichiers
+- renommer des fichiers
+- organiser des dossiers
+- surveiller des processus
+- faire des captures
+- lire certaines informations à l'écran
+- interagir avec des logiciels
+- lancer des workflows
+
+Le langage naturel devient donc une interface de contrôle du PC.
+
+
+COMPTES ET SERVICES
+
+L'assistant pourra être relié aux comptes que je choisis.
+
+Exemples :
+- mails
+- calendrier
+- Drive
+- GitHub
+- Discord
+- services Web
+- réseaux sociaux
+- outils professionnels
+- API
+
+Il pourra selon les permissions :
+- lire
+- rechercher
+- créer
+- modifier
+- envoyer
+- télécharger
+- déclencher une action
+
+Les identifiants ne doivent jamais être stockés directement dans les prompts.
+
+Préférer :
+- OAuth
+- tokens
+- coffre de secrets
+- permissions séparées
+
+
+INTERNET
+
+L'assistant doit pouvoir accéder à Internet.
+
+Fonctions :
+- recherche Web
+- lecture de sites
+- navigation
+- utilisation d'API
+- téléchargement
+- comparaison de sources
+- récupération de données en temps réel
+- interaction avec certains services
+
+Le projet est donc :
+
+LOCAL-FIRST
+
+et non :
+
+LOCAL-ONLY
+
+
+RESEAU LOCAL
+
+Hermes doit pouvoir devenir une interface de contrôle du réseau local.
+
+Exemples :
+- NAS
+- autres PC
+- serveurs
+- Home Assistant
+- imprimantes
+- services auto-hébergés
+- appareils connectés
+
+Architecture :
+
+Hermes
+  |
+Réseau local
+  |
+  +-- NAS
+  +-- PC
+  +-- serveur
+  +-- domotique
+  +-- autres appareils autorisés
+
+
+ACCES DISTANT
+
+Je dois pouvoir parler à l'assistant lorsque je ne suis pas chez moi.
+
+Exemples d'interfaces :
+- téléphone
+- navigateur
+- Telegram
+- Discord
+- interface Web
+- éventuellement application dédiée
+
+Exemples :
+
+"envoie-moi ce fichier"
+
+"regarde si mon PC tourne"
+
+"lance ce programme"
+
+"vérifie mes mails"
+
+"cherche cette information"
+
+"prépare ça avant que je rentre"
+
+
+ACCES DISTANT SECURISE
+
+Ne pas exposer directement Hermes ou Windows sur Internet.
+
+Préférence :
+- VPN privé
+- Tailscale ou équivalent
+- authentification forte
+- chiffrement
+- permissions
+
+Architecture :
+
+Téléphone
+   |
+connexion privée
+   |
+réseau maison
+   |
+Hermes
+
+
+AUTOMATISATIONS
+
+Hermes doit pouvoir agir sans attendre une commande directe.
+
+Exemples :
+- tâches planifiées
+- routines
+- rappels
+- surveillance
+- vérification de mails
+- surveillance de fichiers
+- surveillance de services
+- déclenchement selon événement
+- actions réseau
+
+Exemples :
+
+"Tous les matins, vérifie X."
+
+"Si cette personne m'envoie un mail, préviens-moi."
+
+"Quand ce téléchargement termine, range le fichier."
+
+"Si le serveur tombe, préviens-moi."
+
+
+PERMISSIONS
+
+L'objectif est que l'assistant puisse faire énormément de choses.
+
+Mais il ne faut pas donner immédiatement un accès administrateur absolu à toutes les actions.
+
+Approche progressive :
+
+NIVEAU 1
+Lecture
+- fichiers
+- système
+- Web
+- informations
+
+NIVEAU 2
+Actions réversibles
+- ouvrir applications
+- créer fichiers
+- déplacer documents
+- lancer scripts connus
+
+NIVEAU 3
+Comptes personnels
+- mails
+- calendrier
+- Drive
+- GitHub
+
+NIVEAU 4
+Réseau local
+- NAS
+- serveurs
+- appareils
+
+NIVEAU 5
+Actions sensibles
+- suppression importante
+- achats
+- publication
+- commandes administrateur
+- modification de comptes
+
+Certaines actions peuvent nécessiter confirmation.
+
+Exemples :
+
+Lire un fichier
+-> automatique
+
+Ouvrir Spotify
+-> automatique
+
+Chercher sur Internet
+-> automatique
+
+Créer un dossier
+-> automatique
+
+Supprimer 500 Go
+-> confirmation
+
+Acheter quelque chose
+-> confirmation
+
+Modifier un mot de passe
+-> confirmation
+
+
+PAS DE LIMITE ARCHITECTURALE ARTIFICIELLE
+
+L'objectif n'est pas de limiter l'assistant à une petite liste fixe de commandes.
+
+Il doit être extensible.
+
+S'il manque une capacité :
+- créer un tool
+- créer un skill
+- utiliser un MCP
+- utiliser une API
+- écrire un script
+- ajouter une intégration
+
+Le système doit pouvoir évoluer avec les besoins.
+
+
+MACHINE FUTURE
+
+Si le projet fonctionne réellement, une machine dédiée pourra ensuite remplacer une grande partie des API.
+
+Exemple :
+- 32 Go ou 64 Go RAM
+- GPU 16 Go VRAM
+- GPU 24 Go VRAM ou plus
+
+L'assistant restera le même.
+
+Seul le cerveau changera.
+
+
+EVOLUTION
+
+PHASE 1
+Installer Ollama et tester un petit modèle local.
+
+PHASE 2
+Installer Hermes Agent.
+
+PHASE 3
+Configurer personnalité et mémoire.
+
+PHASE 4
+Tester plusieurs cerveaux :
+- local
+- API
+
+PHASE 5
+Ajouter les premiers outils PC.
+
+PHASE 6
+Ajouter les premiers skills.
+
+PHASE 7
+Construire le pet de bureau.
+
+PHASE 8
+Relier le pet à Hermes.
+
+PHASE 9
+Ajouter la voix.
+
+PHASE 10
+Ajouter les automatisations.
+
+PHASE 11
+Ajouter les comptes.
+
+PHASE 12
+Ajouter l'accès distant sécurisé.
+
+PHASE 13
+Ajouter le réseau local.
+
+PHASE 14
+Développer progressivement de nouveaux skills.
+
+PHASE 15
+Mesurer les limites du PC.
+
+PHASE 16
+Eventuellement construire une machine IA dédiée.
+
+
+VISION FINALE
+
+Le résultat recherché est une entité informatique persistante.
+
+Visuellement :
+un petit chat vivant sur le bureau.
+
+Mentalement :
+une personnalité et une mémoire qui persistent.
+
+Fonctionnellement :
+un agent capable d'agir.
+
+Techniquement :
+une architecture modulaire dont le cerveau est interchangeable.
+
+Schéma final :
+
+                     PET
+                      |
+                      v
+                 HERMES AGENT
+                      |
+        +-------------+-------------+
+        |             |             |
+     MEMOIRE        SKILLS        OUTILS
+        |             |             |
+        +-------------+-------------+
+                      |
+          +-----------+-----------+
+          |                       |
+      MODELE LOCAL              API
+          |                       |
+       OLLAMA              GPT / CLAUDE /
+          |                 GEMINI / ETC.
+        QWEN
+          |
+          +--------------------------------+
+                                           |
+                                     ACTIONS REELLES
+                                           |
+                    +----------------------+----------------------+
+                    |                      |                      |
+                   PC                   INTERNET              RESEAU
+                    |                      |                      |
+                 fichiers              services                 NAS
+                 logiciels             recherches               PC
+                 terminal              comptes               serveurs
+
+
+RESUME
+
+PET
+= présence visuelle
+
+Hermes
+= identité, orchestration et comportement agentique
+
+Mémoire
+= continuité
+
+Skills
+= apprentissage pratique et évolution
+
+Ollama
+= exécution locale
+
+Petit modèle local
+= cerveau privé et léger
+
+API
+= cerveau puissant lorsque nécessaire
+
+Outils
+= capacité d'agir
+
+Internet
+= accès au monde extérieur
+
+Réseau local
+= contrôle de l'environnement informatique
+
+Accès distant
+= assistant disponible partout
+
+Future machine GPU
+= autonomie locale beaucoup plus importante
+
+OBJECTIF FINAL
+
+Un JARVIS personnel, local-first, évolutif, accessible partout, capable d'apprendre des procédures, de développer progressivement ses capacités et de changer de cerveau sans perdre son identité.
