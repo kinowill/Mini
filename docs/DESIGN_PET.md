@@ -131,9 +131,14 @@ Chaque phase se termine par les contrôles du chantier avant la suivante.
   Desktop Virtual Buddy = MIT (réutilisable avec attribution) ; clawd,
   Desktop Pet Cat et Shimeji-ee = sans licence (inspiration uniquement,
   aucune copie). Shimeji-ee est dormant depuis 2016.
-- Sprites : trouver ou produire un set de chat cohérent et licite est le
-  principal risque artistique ; aucun pack CC0/CC-BY sélectionné à ce jour,
-  la V1 démarre avec un placeholder original.
+- Sprites : pack Black-Cat-Shimeji retenu le 2026-09-14 (GitHub
+  `PedroJimenezGuerrero/Black-Cat-Shimeji`, Godot 4, GPL v3) — 34 animations
+  de chat noir, 4-8 frames, 16×16 px, ~0,13 Mo. Décision utilisateur : usage
+  personnel uniquement, stocké hors Git dans `runtime/pet-assets/` ; le dépôt
+  public ne redistribue aucun sprite. Upscale pixel-art nécessaire (×4-×6).
+  Animations V1 couvertes : stand/sit/lay/loaf idle, walk, run, jump, falling,
+  landing, climb, wall, grabbed (drag), lick, catflip, scared, confused.
+  Frames hors sujet (attaque, sang) : non utilisées.
 - Comportement du pet avec deux écrans / DPI élevé : à valider sur machine.
 - Consommation RAM réelle d'Electron sur cette machine : à mesurer en phase 1.
 

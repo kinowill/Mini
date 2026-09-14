@@ -27,7 +27,7 @@ silencieux et désactivable.
 - [x] Tester une chaîne multi-étapes d'outils (ex. écrire puis relire) et le mode approbation.
 - [x] Concevoir le pet (décisions produit, design écrit dans `docs/DESIGN_PET.md`).
 - [x] Vérifier les références GitHub citées (existence, licence, activité).
-- [ ] Trouver des sprites de chat sous licence CC0/CC-BY vérifiée, ou produire un set original (placeholder en attendant).
+- [x] Trouver des sprites de chat : pack Black-Cat-Shimeji retenu (34 animations, 16×16 px), stocké hors Git dans `runtime/pet-assets/` pour usage personnel.
 - [ ] Pet phase 1 : fenêtre transparente, idle, marche, drag, gravité ; mesure RAM.
 - [ ] Pet phase 2 : environnement Windows (barre des tâches, bords, DPI).
 - [ ] Pet phase 3 : vie féline (sommeil, étirements, réactions souris).

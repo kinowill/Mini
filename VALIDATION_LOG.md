@@ -1,5 +1,27 @@
 # Journal de validation — Mini
 
+## 2026-09-14 — Recherche et choix des sprites du pet
+
+- Départ : commit `f22ff27`, main propre et aligné sur origin.
+- Recherche effectuée : GitHub (via `gh search`), OpenGameArt, Kenney ; itch.io
+  inaccessible (403). Packs examinés : Shepardskin « Cat sprites » (CC0, marche
+  et course 6 frames, téléchargé en dossier temporaire pour inspection),
+  EepyKitty (MIT, partiel), ModernShimeji et Nico-Shimeji (CC0, personnages
+  anime), Black-Cat-Shimeji (GPL v3, 34 animations, chat).
+- Choix utilisateur : usage personnel uniquement, licences non contraignantes
+  pour cet usage. Rappel fait : un dépôt public est une mise à disposition ;
+  l'attribution ne vaut pas licence. Décision appliquée : sprites stockés hors
+  Git dans `runtime/pet-assets/` (déjà exclu), aucun sprite versionné.
+- Pack retenu : Black-Cat-Shimeji (`PedroJimenezGuerrero/Black-Cat-Shimeji`,
+  branche `main`, Godot 4) — 147 PNG, 34 animations 4-8 frames, 16×16 px,
+  ~0,13 Mo, extrait dans `runtime/pet-assets/Black-Cat-Shimeji-main/`.
+  Animations V1 couvertes ; frames hors sujet (attaque, sang) non utilisées.
+- Limites : je n'ai pas de vision dans cette session, les poses n'ont pas été
+  vérifiées visuellement par moi ; l'utilisateur peut les consulter dans
+  `runtime/pet-assets/`. Upscale pixel-art à prévoir (×4-×6).
+- États : repo modifié (documentation, non committée) ; aucun asset versionné ;
+  production applicative non applicable ; validation documentaire effectuée.
+
 ## 2026-09-14 — Vérification des références GitHub et licences
 
 - Départ : commit `6a93978`, main propre et aligné sur origin.

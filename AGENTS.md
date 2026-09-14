@@ -12,6 +12,8 @@ Révision du protocole global : a24f2443f64b09932a27db7343a87f6b18b86e05.
 - Préserver `projet_jarvis_hermes_agent.txt` comme vision initiale.
 - Hermes est le noyau retenu. Le pet de bureau (chat, Electron + TypeScript)
   est conçu : `docs/DESIGN_PET.md`. DeepSeek reste désactivé.
+- Les sprites du pet vivent hors Git dans `runtime/pet-assets/` (usage
+  personnel uniquement) ; ne jamais les versionner.
 - Ne pas présenter les capacités du cahier des charges comme déjà fonctionnelles.
 - Aucun script de build ou de test applicatif n'existe encore. Définir les contrôles
   adaptés lorsque le premier composant sera introduit.
