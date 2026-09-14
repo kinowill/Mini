@@ -10,7 +10,8 @@ Révision du protocole global : a24f2443f64b09932a27db7343a87f6b18b86e05.
   suite documentée. Il n'autorise pas à inventer une décision produit ni à déployer.
 - Documentation et échanges en français ; code en anglais.
 - Préserver `projet_jarvis_hermes_agent.txt` comme vision initiale.
-- Hermes est le noyau retenu. DeepSeek et deux pets sont des pistes en cours de cadrage.
+- Hermes est le noyau retenu. Le pet de bureau (chat, Electron + TypeScript)
+  est conçu : `docs/DESIGN_PET.md`. DeepSeek reste désactivé.
 - Ne pas présenter les capacités du cahier des charges comme déjà fonctionnelles.
 - Aucun script de build ou de test applicatif n'existe encore. Définir les contrôles
   adaptés lorsque le premier composant sera introduit.

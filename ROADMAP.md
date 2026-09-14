@@ -1,19 +1,21 @@
 # Roadmap — Mini / assistant personnel JARVIS
 
-Dernière mise à jour : 2026-09-13.
+Dernière mise à jour : 2026-09-14.
 
 ## Sources et état
 
 - Vision : `projet_jarvis_hermes_agent.txt`, lu intégralement.
 - Document maître : `MASTER.md`, créé dans le cadre de la demande d'alignement.
 - Dossier initial : cahier des charges uniquement ; socle documentaire et Git ajoutés, aucun code applicatif.
-- Ollama et Qwen 3.5 2B : premier essai effectué ; Hermes et DeepSeek non intégrés.
+- Ollama, Qwen 3.5 2B et Hermes : échanges, outils et chaînes validés en local ; DeepSeek désactivé.
+- Design du pet de bureau : `docs/DESIGN_PET.md`, validé le 2026-09-14.
 - Production et validation comportementale : non établies.
 
 ## Objectif courant
 
-Valider le socle Hermes local, puis mesurer si Qwen 3.5 2B peut assurer de façon
-fiable les interactions et appels d'outils du petit pet.
+Construire le pet de bureau V1 : un chat autonome (Electron + TypeScript) qui
+vit sur le bureau et affiche les états de Hermes, avec démarrage Windows
+silencieux et désactivable.
 
 ## Prochaines tâches
 
@@ -23,7 +25,15 @@ fiable les interactions et appels d'outils du petit pet.
 - [x] Installer Hermes Windows dans Mini et vérifier un échange intégré avec Ollama.
 - [x] Tester plusieurs appels d'outils Hermes sans donnée personnelle.
 - [x] Tester une chaîne multi-étapes d'outils (ex. écrire puis relire) et le mode approbation.
-- [ ] Concevoir les deux pets et leur démarrage automatique Windows, silencieux et désactivable.
+- [x] Concevoir le pet (décisions produit, design écrit dans `docs/DESIGN_PET.md`).
+- [ ] Vérifier les références GitHub citées et les licences d'assets (chat CC0/CC-BY).
+- [ ] Pet phase 1 : fenêtre transparente, idle, marche, drag, gravité ; mesure RAM.
+- [ ] Pet phase 2 : environnement Windows (barre des tâches, bords, DPI).
+- [ ] Pet phase 3 : vie féline (sommeil, étirements, réactions souris).
+- [ ] Pet phase 4 : Pet Controller (state machine, besoins, cooldowns).
+- [ ] Pet phase 5 : câblage Hermes (protocole d'événements, états affichés).
+- [ ] Pet phase 6 : menu tray, démarrage Windows silencieux et désactivable.
+- [ ] Pet phase 7 : assets sous licence vérifiée et polissage.
 
 ## Centralisation du runtime — critères
 
@@ -113,15 +123,26 @@ Exécuté le 2026-09-14, preuves dans `validation/2026-09-14-chaine-outils/`.
   l'invite en mode non interactif reste à observer plus tard, sans commande
   destructive.
 - Verdict : la mécanique des outils et les chaînes courtes sont fiables avec
-  Qwen 3.5 2B à contexte 64K. Prochaine étape : concevoir les pets, avec les
-  décisions produit encore ouvertes (identités, mémoire, routage).
+  Qwen 3.5 2B à contexte 64K. Le pet (chat, Electron + TypeScript) a été
+  conçu le 2026-09-14 : `docs/DESIGN_PET.md`.
+
+## Chantier — Pet de bureau V1 — critères
+
+Résultat attendu : un chat visible sur le bureau qui vit seul (marche, dort,
+réagit à la souris, gravité) et change d'état quand Hermes travaille ;
+démarrage Windows silencieux, désactivable et vérifié. À préserver : Hermes
+intact, aucune donnée personnelle, aucun secret versionné, aucune action
+système depuis le pet. Contrôles : lancement/fermeture propres, RAM mesurée,
+comportement observé sans modèle chargé, réception d'un événement Hermes
+réel, autostart activé puis désactivé testés. Détails : `docs/DESIGN_PET.md`.
 
 ## Points en attente
 
-- DeepSeek envisagé pour le modèle distant ; deux pets préférés provisoirement, sans décision sur leurs identités, mémoire ou routage.
-- DeepSeek désactivé : définir une passerelle manuelle minimisant le texte envoyé et excluant mémoire, fichiers et historique.
+- Un seul pet décidé (chat, Electron + TypeScript, design validé). Deuxième pet non retenu à ce stade.
+- DeepSeek envisagé pour le modèle distant, désactivé ; passerelle manuelle à définir (minimiser le texte envoyé, exclure mémoire, fichiers et historique) ; aucun routage automatique arrêté.
 - Centralisation restante : environ 2,96 Go de programme Ollama restent dans son emplacement Windows géré ; environ 54 Mo de pilote CUA restent hors Mini.
-- Versions, compatibilité réelle, ressources disponibles et modèle initial à établir ; les exemples du cahier des charges ne valent pas mesure ni validation.
+- Références GitHub du document externe et licences d'assets : à vérifier avant usage.
+- Versions, compatibilité réelle et ressources à re-mesurer au fil des phases du pet ; les exemples du cahier des charges ne valent pas mesure ni validation.
 
 ## Suite prévue dans le cahier des charges
 

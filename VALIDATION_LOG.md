@@ -1,5 +1,28 @@
 # Journal de validation — Mini
 
+## 2026-09-14 — Conception du pet de bureau
+
+- Départ : commit `93b8d12`, main propre et aligné sur origin.
+- Chantier documentaire : design du pet, aucun code écrit. Skill brainstorming
+  chargée ; décisions prises une par une avec l'utilisateur.
+- Décisions arbitrées : un seul pet ; apparence chat ; vrai pet de bureau
+  flottant ; moteur Electron + TypeScript ; architecture trois couches
+  (Hermes → Pet Controller → moteur) ; vie autonome sans IA ; V1 sans
+  conversation ni actions depuis le pet ; DeepSeek inchangé (désactivé).
+- Document externe `Hermes_Desktop_Pet_Architecture.txt` (bureau Windows) lu
+  avec esprit critique : architecture conceptuelle retenue, choix technologique
+  arbitré différemment (Electron au lieu de Tauri+Rust) ; les références GitHub
+  et licences d'assets citées restent à vérifier (noté dans le design).
+- Rédigé `docs/DESIGN_PET.md` (compréhension, journal des décisions,
+  hypothèses, architecture, protocole d'événements, périmètre V1, phases,
+  critères de réussite, risques) ; mis à jour `MASTER.md`, `ROADMAP.md` et
+  `AGENTS.md` en cohérence.
+- Contrôles : relecture des documents modifiés ; cohérence croisée
+  maître/roadmap/design vérifiée ; aucun code ni secret ajouté.
+- États : repo modifié (documentation, non committée) ; production applicative
+  non applicable ; validation documentaire effectuée en session, avec
+  arbitrages utilisateur explicites.
+
 ## 2026-09-14 — Chaîne d'outils et approbations
 
 - Départ : commit `66c3389`, main propre.
