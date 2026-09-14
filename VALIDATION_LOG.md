@@ -1,5 +1,22 @@
 # Journal de validation — Mini
 
+## 2026-09-14 — Vérification des références GitHub et licences
+
+- Départ : commit `6a93978`, main propre et aligné sur origin.
+- Quatre références vérifiées par API GitHub (`gh api repos/...`), aucun code
+  ni asset téléchargé : `spyderweb47/Desktop-Virtual-buddy` (MIT, TypeScript,
+  actif 2026-04, réutilisable avec attribution) ; `ccyrene/clawd` (sans
+  licence, inspiration uniquement) ; `WildxHV/desktop-pet` (sans licence,
+  inspiration comportement félin) ; `MorningAppleDew/shimeji-ee` (sans
+  licence, dormant 2016, vocabulaire d'animations uniquement).
+- Aucun pack de sprites de chat CC0/CC-BY sélectionné : la V1 conserve un
+  placeholder original ; l'asset final reste à trouver ou produire.
+- Documents mis à jour : `ROADMAP.md` (résultats du chantier, tâche cochée,
+  nouvelle tâche sprites), `docs/DESIGN_PET.md` (section risques), présent
+  journal.
+- États : repo modifié (documentation, non committée) ; production applicative
+  non applicable ; validation documentaire effectuée (réponses API examinées).
+
 ## 2026-09-14 — Conception du pet de bureau
 
 - Départ : commit `93b8d12`, main propre et aligné sur origin.

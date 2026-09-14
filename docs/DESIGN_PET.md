@@ -126,11 +126,14 @@ Chaque phase se termine par les contrôles du chantier avant la suivante.
 
 ## Risques et inconnues
 
-- Les quatre références GitHub citées dans le document externe
-  (Desktop Virtual Buddy, Clawd, Desktop Pet Cat, Shimeji-ee) n'ont pas encore
-  été vérifiées (existence, licence, activité, compatibilité Windows 11).
+- Les quatre références GitHub citées dans le document externe ont été
+  vérifiées le 2026-09-14 par API GitHub : toutes existent. Licences :
+  Desktop Virtual Buddy = MIT (réutilisable avec attribution) ; clawd,
+  Desktop Pet Cat et Shimeji-ee = sans licence (inspiration uniquement,
+  aucune copie). Shimeji-ee est dormant depuis 2016.
 - Sprites : trouver ou produire un set de chat cohérent et licite est le
-  principal risque artistique ; la V1 démarre avec un placeholder.
+  principal risque artistique ; aucun pack CC0/CC-BY sélectionné à ce jour,
+  la V1 démarre avec un placeholder original.
 - Comportement du pet avec deux écrans / DPI élevé : à valider sur machine.
 - Consommation RAM réelle d'Electron sur cette machine : à mesurer en phase 1.
 

@@ -26,7 +26,8 @@ silencieux et désactivable.
 - [x] Tester plusieurs appels d'outils Hermes sans donnée personnelle.
 - [x] Tester une chaîne multi-étapes d'outils (ex. écrire puis relire) et le mode approbation.
 - [x] Concevoir le pet (décisions produit, design écrit dans `docs/DESIGN_PET.md`).
-- [ ] Vérifier les références GitHub citées et les licences d'assets (chat CC0/CC-BY).
+- [x] Vérifier les références GitHub citées (existence, licence, activité).
+- [ ] Trouver des sprites de chat sous licence CC0/CC-BY vérifiée, ou produire un set original (placeholder en attendant).
 - [ ] Pet phase 1 : fenêtre transparente, idle, marche, drag, gravité ; mesure RAM.
 - [ ] Pet phase 2 : environnement Windows (barre des tâches, bords, DPI).
 - [ ] Pet phase 3 : vie féline (sommeil, étirements, réactions souris).
@@ -135,6 +136,32 @@ intact, aucune donnée personnelle, aucun secret versionné, aucune action
 système depuis le pet. Contrôles : lancement/fermeture propres, RAM mesurée,
 comportement observé sans modèle chargé, réception d'un événement Hermes
 réel, autostart activé puis désactivé testés. Détails : `docs/DESIGN_PET.md`.
+
+## Chantier — vérification des références et licences — critères
+
+- Résultat attendu : pour chacune des quatre références GitHub citées par le
+  document externe, faits vérifiés par API GitHub (existence, licence, activité,
+  archivage, langage) et verdict d'usage pour le projet ; critères de licence
+  retenus pour les sprites du chat (CC0/CC-BY ou création originale).
+- À préserver : aucune installation, aucun code copié, aucun asset téléchargé
+  tant que les licences ne sont pas vérifiées ; décisions structurantes du
+  design inchangées.
+- Contrôles : réponses API consignées, verdict écrit pour chaque référence,
+  cohérence avec `docs/DESIGN_PET.md` mise à jour.
+
+## Chantier — vérification des références et licences — résultats
+
+Vérifié le 2026-09-14 par API GitHub (`gh api`), aucun code ni asset téléchargé.
+- `spyderweb47/Desktop-Virtual-buddy` : existe, MIT, TypeScript, actif 2026-04.
+  Référence principale, réutilisable avec attribution.
+- `ccyrene/clawd` : existe, sans licence, actif 2026-04. Inspiration uniquement
+  (moteur Windows, escalade), aucune copie de code.
+- `WildxHV/desktop-pet` : existe, sans licence, Python, actif 2026-06.
+  Inspiration comportement félin uniquement.
+- `MorningAppleDew/shimeji-ee` : existe, sans licence, dormant depuis 2016.
+  Vocabulaire d'animations historique uniquement ; ne pas utiliser son moteur.
+- Sprites de chat : aucun pack CC0/CC-BY sélectionné ; la V1 démarre avec un
+  placeholder original, l'asset final reste à trouver ou produire.
 
 ## Points en attente
 
