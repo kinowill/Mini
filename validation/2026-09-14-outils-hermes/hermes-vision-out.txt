@@ -1,0 +1,9 @@
+**Texte visuel :**
+- "TOOL TEST 42" au centre de l'image en police sans-serif, blanche.
+
+**Couleurs visibles :**
+- Fond : bleu foncé uniforme (`#00008B`)
+- Texte : blanc pur, très clair
+
+**Éléments visuels autres que texte :**
+- Pas d'autres éléments graphiques, logos ou dégradés visibles à cette résolution.

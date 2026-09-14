@@ -1,0 +1,1 @@
+`Write-Output TERMINAL_OUTIL_OK` executed successfully with output: `TERMINAL_OUTIL_OK`.

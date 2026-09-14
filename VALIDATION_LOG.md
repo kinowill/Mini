@@ -1,5 +1,47 @@
 # Journal de validation — Mini
 
+## 2026-09-14 — Outils Hermes et mesure RAM
+
+- Départ : commit `5d508dc`, main propre. Check de contexte avant chantier : feu vert.
+- Environnement : variables utilisateur `OLLAMA_MODELS`, `HERMES_HOME`,
+  `OLLAMA_CONTEXT_LENGTH=64000` effectives ; `ollama list` montre qwen3.5:2b ;
+  `hermes.exe --version` : v0.21.2, upstream `476dbfed`.
+- Au démarrage du serveur, un avertissement « models path not accessible, using
+  default » a été observé une fois, sans conséquence : le modèle est resté
+  visible et utilisable. Mise à jour Ollama v0.34.0 signalée, non appliquée.
+- `ollama show qwen3.5:2b` : capacités officielles completion, vision, tools,
+  thinking ; contexte natif 262144, plafonné à 64000 par Hermes.
+- Échange de contrôle Hermes (`-z --cli`) : sortie exacte `TOOLS SANITY OK`,
+  93,9 s (chargement du modèle inclus).
+- RAM (échantillons toutes les 5 s, preuve `ram-samples.txt`) : 4 354 Mo libres
+  à vide sur 15 720 ; ~2 025 Mo modèle chargé ; minimum 1 403 Mo pendant
+  l'échange Hermes. Modèle : 3,9 Go, CPU/GPU 55 %/45 %. La marge existe mais
+  reste étroite pour deux pets simultanés.
+- Outil file : deux écritures réelles exécutées, contenu exact
+  `FICHIER OUTIL OK.`, mais le modèle a créé les fichiers dans
+  `C:\Users\ArtLi\chantier-outils\` au lieu du dossier demandé
+  (`..\chantier-outils` depuis `runtime\hermes`) et a produit deux fichiers
+  (`note-outil.txt`, `note.txt`) avec un résumé final incohérent. Exécution
+  d'outil réelle, compréhension de chemin et synthèse non fiables. Dossier
+  parasite supprimé après vérification du contenu.
+- Outil terminal : exécution réelle capturée, sortie `TERMINAL_OUTIL_OK`,
+  environ 40 s. Aucune entrée ajoutée dans `terminal-sessions`.
+- Outil vision : image de test 320×160 fond bleu foncé `#00008B` avec texte
+  blanc `TOOL TEST 42` ; description exacte (texte et couleur hexadécimale),
+  environ 40 s. Preuves : `validation/2026-09-14-outils-hermes/`.
+- Incidents résolus : l'invocation directe avec `2>&1` (PowerShell 5.1) se
+  bloque sur les runs avec outils (fusion stderr) ; contournement : lancement
+  via `Start-Process` avec redirections séparées. Le lanceur Hermes rejette les
+  guillemets doubles imbriqués dans le prompt `-z` ; utiliser des prompts sans
+  guillemets ou le lancement `Start-Process`.
+- Limites : prompts fictifs sans donnée personnelle, un toolset restreint par
+  test (`-t file|terminal|vision`), aucune chaîne multi-étapes, commande
+  terminal inoffensive, aucun accès réseau hors Ollama local, approbations en
+  mode non interactif non explorées, mémoire désactivée.
+- États : repo modifié (documentation et preuves copiées, non committées) ;
+  validation locale effectuée sur cette machine ; production applicative non
+  applicable.
+
 ## 2026-09-13 — Centralisation et installation Hermes locale
 
 - Départ : commit `1c974bbd5ce4ceb70bd42932378fd495e814f85a`, main propre.

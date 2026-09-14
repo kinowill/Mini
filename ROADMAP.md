@@ -21,7 +21,8 @@ fiable les interactions et appels d'outils du petit pet.
 - [x] Vérifier le matériel, Ollama et consulter les prérequis officiels.
 - [x] Télécharger et tester Qwen 3.5 2B ; trois réponses simples correctes, rapport conservé.
 - [x] Installer Hermes Windows dans Mini et vérifier un échange intégré avec Ollama.
-- [ ] Tester plusieurs appels d'outils Hermes sans donnée personnelle.
+- [x] Tester plusieurs appels d'outils Hermes sans donnée personnelle.
+- [ ] Tester une chaîne multi-étapes d'outils (ex. écrire puis relire) et le mode approbation.
 - [ ] Concevoir les deux pets et leur démarrage automatique Windows, silencieux et désactivable.
 
 ## Centralisation du runtime — critères
@@ -55,6 +56,35 @@ rapport versionné. Ce test ne valide ni Hermes ni des actions réelles sur le P
 
 Résultat : trois réponses correctes ; premier appel 66,36 s puis 0,38 et 0,27 s.
 Preuve : `validation/2026-09-13-ollama.json`.
+
+## Chantier — outils Hermes et mesure RAM — critères
+
+- Résultat attendu : plusieurs appels d'outils Hermes (file, terminal, vision)
+  réussis avec Qwen 3.5 2B sur des données fictives uniquement, dans un dossier
+  de test dédié sous `runtime` ; mesure de la RAM libre avec Ollama et Hermes
+  simultanés (modèle chargé + session active).
+- À préserver : aucune donnée personnelle, aucun compte, aucun accès réseau
+  externe (Ollama local uniquement), aucune écriture hors du dossier de test,
+  installations existantes intactes, secrets non lus.
+- Contrôles : fichier créé puis relu par l'outil file, commande terminal
+  inoffensive exécutée, image de test générée localement décrite par l'outil
+  vision ; RAM libre mesurée avant chargement, modèle chargé, et pendant une
+  session Hermes ; sorties et preuves conservées sous `validation/`.
+
+## Chantier — outils Hermes et mesure RAM — résultats
+
+Exécuté le 2026-09-14, preuves dans `validation/2026-09-14-outils-hermes/`.
+- Outil file : exécution réelle avec contenu exact, mais chemin mal résolu
+  (écriture dans le profil utilisateur) et synthèse incohérente.
+- Outil terminal : exécution réelle capturée (`TERMINAL_OUTIL_OK`).
+- Outil vision : description exacte de l'image de test (`TOOL TEST 42` sur
+  `#00008B`).
+- RAM : 4 354 Mo libres à vide → ~2 025 Mo modèle chargé → minimum 1 403 Mo
+  pendant l'échange Hermes. Marge étroite mais suffisante à ce stade.
+- Enseignements : mécanique des appels d'outils fiable ; compréhension des
+  chemins et synthèses du petit modèle peu fiables (à re-tester en chaîne) ;
+  lancer Hermes sans guillemets imbriqués dans le prompt et sans fusion
+  `2>&1` PowerShell.
 
 ## Points en attente
 
