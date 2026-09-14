@@ -1,0 +1,5 @@
+Le fichier **C:\PROJETS\Mini\runtime\chantier-outils\chaine2.txt** a été créé et vérifié avec succès :
+
+- Contenu : `CHAINE2` (7 bytes)
+
+La lecture du fichier confirmant que la chaîne existe bien dans le dossier.

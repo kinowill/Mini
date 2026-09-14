@@ -1,5 +1,27 @@
 # Journal de validation — Mini
 
+## 2026-09-14 — Chaîne d'outils et approbations
+
+- Départ : commit `66c3389`, main propre.
+- Chaîne même outil (file : écrire puis relire) : réussie en ~40 s ; fichier
+  `chaine.txt` créé au chemin absolu demandé, contenu relu exact
+  `CHAINE OUTIL OK`. Le passage en chemins absolus corrige l'erreur de
+  résolution observée le matin même avec un chemin relatif.
+- Chaîne inter-outils (file puis terminal : créer puis `Get-Content`) :
+  réussie en ~100 s ; `chaine2.txt` créé avec `CHAINE2`, lecture via terminal
+  rapportée correctement. Synthèse finale légèrement maladroite, substance exacte.
+- Système d'approbation vérifié en dry-run (`hermes approvals test`, n'exécute
+  rien) : `Write-Output` et `Get-Content` → allow sans invite ; `Remove-Item
+  -Recurse` → ask-approval, règle « PowerShell destructive delete (Remove-Item) ».
+  Les exécutions one-shot du matin n'ont donc pas contourné les garde-fous :
+  leurs commandes étaient en catégorie allow.
+- Limites : comportement de l'invite d'approbation en mode non interactif non
+  testé (aucune commande destructive exécutée, par critère du chantier) ; chaînes
+  courtes uniquement (2 étapes) ; une seule session chacun ; preuves dans
+  `validation/2026-09-14-chaine-outils/`.
+- États : repo modifié (documentation et preuves, non committées) ; validation
+  locale effectuée ; production applicative non applicable.
+
 ## 2026-09-14 — Outils Hermes et mesure RAM
 
 - Départ : commit `5d508dc`, main propre. Check de contexte avant chantier : feu vert.

@@ -1,0 +1,4 @@
+hermes approvals test -- Write-Output TERMINAL_OUTIL_OK -> verdict allow (exit 0), no guard matched
+hermes approvals test -- Get-Content C:\PROJETS\Mini\runtime\chantier-outils\chaine.txt -> verdict allow (exit 0), no guard matched
+hermes approvals test -- Remove-Item -Recurse C:\PROJETS\Mini\runtime\chantier-outils -> verdict ask-approval (exit 2), rule: PowerShell destructive delete (Remove-Item), interactive prompt would be raised
+None of these commands was executed by the dry-run.

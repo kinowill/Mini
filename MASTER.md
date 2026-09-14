@@ -11,7 +11,7 @@ L'identité, la mémoire et les procédures doivent persister quand le modèle c
 ## État courant
 
 - Projet au stade du cadrage : cahier des charges et documentation, aucun code applicatif.
-- Ollama 0.33.3 et Qwen 3.5 2B opérationnels. Hermes Agent 0.21.2 installé et relié au modèle local ; premier échange intégré réussi. Le 2026-09-14, appels d'outils validés en exécution réelle (file, terminal, vision) ; RAM minimale observée ~1,4 Go libres avec modèle chargé et Hermes actif. DeepSeek non activé.
+- Ollama 0.33.3 et Qwen 3.5 2B opérationnels. Hermes Agent 0.21.2 installé et relié au modèle local ; premier échange intégré réussi. Le 2026-09-14, appels d'outils validés en exécution réelle (file, terminal, vision), chaînes courtes d'outils réussies (chemins absolus) et garde-fous d'approbation vérifiés en dry-run ; RAM minimale observée ~1,4 Go libres avec modèle chargé et Hermes actif. DeepSeek non activé.
 - Socle documentaire publié sur https://github.com/kinowill/Mini (`main`, commit initial `043bc53`) ; synchronisation vérifiée, preuves dans `VALIDATION_LOG.md`.
 
 ## Choix et pistes
@@ -58,12 +58,13 @@ Il n'existe encore ni code applicatif, ni migration, ni déploiement.
 
 ## Prochain chantier
 
-La mécanique des appels d'outils Hermes est validée (file, terminal, vision).
-Avant de développer les pets : tester une chaîne multi-étapes d'outils et le
-comportement des approbations, puis arbitrer les décisions produit encore
-ouvertes (identités des deux pets, mémoire commune ou séparée, routage).
-La compréhension des chemins et les synthèses de Qwen 3.5 2B se sont révélées
-peu fiables lors du test file : à re-tester en chaîne avant tout engagement.
+La mécanique des outils, les chaînes courtes et les garde-fous d'approbation
+sont validés avec Qwen 3.5 2B. Prochaine étape : concevoir les deux pets et
+leur démarrage automatique Windows silencieux et désactivable. Avant tout code,
+arbitrer les décisions produit encore ouvertes : identités des deux pets,
+mémoire commune ou séparée, routage local/DeepSeek et périmètre des outils
+exposés aux pets. La marge RAM mesurée (~1,4 Go libres en activité) devra être
+respectée : deux pets simultanés supposent de re-mesurer.
 Qwen 3.5 2B reste un candidat : premier appel 66,36 s (dont 45,21 s de chargement),
 puis 0,38 et 0,27 s ; 32–42 tokens/s, contexte 4096, partage CPU/GPU 37 %/63 %.
 Ces essais courts ne valident ni les tâches longues, ni les outils, ni la mémoire.
