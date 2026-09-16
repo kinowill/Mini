@@ -17,7 +17,10 @@ Révision du protocole global : a24f2443f64b09932a27db7343a87f6b18b86e05.
 - Ne pas présenter les capacités du cahier des charges comme déjà fonctionnelles.
 - App du pet : `apps/pet` (Electron + TypeScript). Commandes : `npm run check`
   (typecheck, deux configs : main/preload en Node16, renderer en module ES),
-  `npm run build` (compilation), `npm start` (lancement). Pour voir les erreurs
+  `npm run build` (compilation), `npm start` (lancement). Pour lancer **sans
+  fenêtre console parasite**, appeler directement
+  `node_modules\electron\dist\electron.exe` via `Start-Process` (le wrapper
+  `electron.cmd` laisse une fenêtre cmd ouverte). Pour voir les erreurs
   console du renderer, lancer avec `--enable-logging` et redirections séparées
   (`Start-Process`, pas de `2>&1` sous PowerShell 5.1). Les sprites vivent hors
   Git dans `runtime/pet-assets/Black-Cat-Shimeji/assets`.
