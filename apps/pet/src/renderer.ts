@@ -28,6 +28,7 @@ class Pet {
   private ctx: CanvasRenderingContext2D;
   private manifest: Manifest | null = null;
   private frames: Record<string, HTMLImageElement[]> = {};
+  private silhouettes: Record<string, HTMLCanvasElement[]> = {};
   private state: PetState = "idle";
   private facing = 1;
   private x = 0;
@@ -56,6 +57,9 @@ class Pet {
     this.canvas.height = this.manifest.windowSize;
     for (const [name, paths] of Object.entries(this.manifest.animations)) {
       this.frames[name] = await Promise.all(paths.map((p) => this.loadImage(p)));
+      this.silhouettes[name] = this.frames[name].map((img) =>
+        this.makeSilhouette(img, this.manifest!.windowSize)
+      );
     }
     const wa = this.manifest.workArea;
     this.floor = wa.y + wa.height - this.manifest.windowSize;
@@ -73,6 +77,19 @@ class Pet {
       img.onerror = reject;
       img.src = "file://" + path.replace(/\\/g, "/");
     });
+  }
+
+  private makeSilhouette(img: HTMLImageElement, size: number): HTMLCanvasElement {
+    const canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+    ctx.imageSmoothingEnabled = false;
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, size, size);
+    ctx.globalCompositeOperation = "source-in";
+    ctx.drawImage(img, 0, 0, size, size);
+    return canvas;
   }
 
   private rand(min: number, max: number): number {
@@ -181,13 +198,33 @@ class Pet {
     if (!this.manifest || frames.length === 0) return;
     this.animTime += dt;
     const index = Math.floor(this.animTime * FRAME_RATE) % frames.length;
+    const img = frames[index];
+    const silhouette = this.silhouettes[this.currentAnimName()]?.[index];
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.imageSmoothingEnabled = false;
     this.ctx.save();
     this.ctx.scale(this.facing, 1);
     const dw = this.manifest.windowSize;
-    this.ctx.drawImage(frames[index], this.facing === 1 ? 0 : -dw, 0, dw, dw);
+    const dx = this.facing === 1 ? 0 : -dw;
+    if (silhouette) {
+      this.ctx.save();
+      this.ctx.shadowColor = "rgba(255,255,255,0.85)";
+      this.ctx.shadowBlur = 6;
+      this.ctx.drawImage(silhouette, dx, 0, dw, dw);
+      this.ctx.restore();
+    }
+    this.ctx.drawImage(img, dx, 0, dw, dw);
     this.ctx.restore();
+  }
+
+  private currentAnimName(): string {
+    const map: Record<PetState, string> = {
+      idle: IDLE_ANIM,
+      walk: WALK_ANIM,
+      fall: FALL_ANIM,
+      grabbed: GRAB_ANIM,
+    };
+    return map[this.state];
   }
 }
 
