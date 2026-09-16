@@ -1,10 +1,12 @@
 import { app, BrowserWindow, ipcMain, screen } from "electron";
 import * as fs from "fs";
 import * as path from "path";
+import { enumerateVisibleWindows } from "./windows";
 
 const SCALE = 4;
 const FRAME_SIZE = 16;
 const WINDOW_SIZE = FRAME_SIZE * SCALE;
+const WINDOWS_POLL_MS = 1500;
 
 interface Manifest {
   animations: Record<string, string[]>;
@@ -52,6 +54,7 @@ function buildManifest(assetsDir: string): Record<string, string[]> {
 }
 
 let win: BrowserWindow | null = null;
+let watcher: NodeJS.Timeout | null = null;
 
 function createWindow(): void {
   const workArea = screen.getPrimaryDisplay().workArea;
@@ -72,6 +75,7 @@ function createWindow(): void {
     },
   });
   win.setAlwaysOnTop(true, "screen-saver");
+  win.setIgnoreMouseEvents(true, { forward: true });
   win.setPosition(
     workArea.x + workArea.width - WINDOW_SIZE - 40,
     workArea.y + workArea.height - WINDOW_SIZE
@@ -99,8 +103,34 @@ ipcMain.handle("pet:setPosition", (_event, x: number, y: number) => {
   }
 });
 
+ipcMain.handle("pet:setInteractive", (_event, on: boolean) => {
+  if (win) {
+    win.setIgnoreMouseEvents(!on, { forward: true });
+  }
+});
+
+function startWindowWatcher(): void {
+  if (watcher) return;
+  const selfPid = process.pid;
+  watcher = setInterval(() => {
+    void (async () => {
+      if (!win || win.isDestroyed()) return;
+      const scale = screen.getPrimaryDisplay().scaleFactor;
+      const rects = await enumerateVisibleWindows(selfPid);
+      const scaled = rects.map((r) => ({
+        x: r.x / scale,
+        y: r.y / scale,
+        width: r.width / scale,
+        height: r.height / scale,
+      }));
+      win?.webContents.send("windows:update", scaled);
+    })();
+  }, WINDOWS_POLL_MS);
+}
+
 app.whenReady().then(() => {
   createWindow();
+  startWindowWatcher();
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
@@ -109,5 +139,9 @@ app.whenReady().then(() => {
 });
 
 app.on("window-all-closed", () => {
+  if (watcher) {
+    clearInterval(watcher);
+    watcher = null;
+  }
   app.quit();
 });

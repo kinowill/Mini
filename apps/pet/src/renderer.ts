@@ -5,11 +5,20 @@ interface Manifest {
   workArea: { x: number; y: number; width: number; height: number };
 }
 
+interface WindowRect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 declare global {
   interface Window {
     petApi: {
       getManifest(): Promise<Manifest>;
       setPosition(x: number, y: number): Promise<void>;
+      setInteractive(on: boolean): Promise<void>;
+      onWindowsUpdate(cb: (rects: WindowRect[]) => void): () => void;
     };
   }
 }
@@ -20,6 +29,7 @@ const FALL_EXP = 3.2;
 const MAX_FALL_SPEED = 3200;
 const WALK_SPEED = 70;
 const RUN_SPEED = 155;
+const CLIMB_SPEED = 90;
 const JUMP_VY = -450;
 const JUMP_VX = 120;
 const FLEE_VX = 180;
@@ -43,6 +53,7 @@ type PetState =
   | "jump"
   | "fall"
   | "landing"
+  | "climb"
   | "curious"
   | "scared"
   | "grabbed";
@@ -67,10 +78,17 @@ const STATES: Record<PetState, StateSpec> = {
   jump: { anim: "jump" },
   fall: { anim: "falling" },
   landing: { anim: "stand_idle", intro: "landing", duration: [0.5, 0.7] },
+  climb: { anim: "climb_front" },
   curious: { anim: "touch", duration: [2, 4] },
   scared: { anim: "scared", duration: [0.7, 1.1] },
   grabbed: { anim: "grabbed" },
 };
+
+interface ClimbPlan {
+  win: WindowRect;
+  phase: "approach" | "climb" | "roam";
+  side: -1 | 1;
+}
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
@@ -81,6 +99,8 @@ class Pet {
   private manifest: Manifest | null = null;
   private frames: Record<string, HTMLImageElement[]> = {};
   private composed: Record<string, HTMLCanvasElement[]> = {};
+  private alphas: Record<string, Uint8ClampedArray[]> = {};
+  private currentAlpha: Uint8ClampedArray | null = null;
   private state: PetState = "idle";
   private facing = 1;
   private x = 0;
@@ -88,6 +108,7 @@ class Pet {
   private vx = 0;
   private vy = 0;
   private floor = 0;
+  private standY = 0;
   private animTime = 0;
   private worldTime = 0;
   private stateTime = 0;
@@ -98,6 +119,7 @@ class Pet {
   private boredom = 25;
   private nextDecision = 3;
   private dragging = false;
+  private interactive = false;
   private grabOffsetX = 0;
   private grabOffsetY = 0;
   private hoverTime = 0;
@@ -109,6 +131,14 @@ class Pet {
   private lastScaredAt = -99;
   private lastCuriousAt = -99;
   private lastDrawKey = "";
+  private windows: WindowRect[] = [];
+  private edge: WindowRect | null = null;
+  private plan: ClimbPlan | null = null;
+  private roamTime = 0;
+  private roamMax = 8;
+  private climbTargetY = 0;
+  private jumpTarget: { standY: number; minX: number; maxX: number } | null = null;
+  private jumpTargetWin: WindowRect | null = null;
   private lastTime = performance.now();
 
   constructor(private canvas: HTMLCanvasElement) {
@@ -117,30 +147,37 @@ class Pet {
     canvas.addEventListener("pointermove", (e) => this.onPointerMove(e));
     canvas.addEventListener("pointerup", (e) => this.onPointerUp(e));
     canvas.addEventListener("pointercancel", (e) => this.onPointerUp(e));
+    canvas.addEventListener("mousemove", (e) => this.onMouseMove(e));
     canvas.addEventListener("pointerenter", () => {
       this.hovering = true;
     });
     canvas.addEventListener("pointerleave", () => {
       this.hovering = false;
       this.hoverTime = 0;
+      if (this.interactive) {
+        this.interactive = false;
+        void window.petApi.setInteractive(false);
+      }
     });
   }
 
   async init(): Promise<void> {
     this.manifest = await window.petApi.getManifest();
-    this.canvas.width = this.manifest.windowSize;
-    this.canvas.height = this.manifest.windowSize;
+    const size = this.manifest.windowSize;
+    this.canvas.width = size;
+    this.canvas.height = size;
     for (const [name, paths] of Object.entries(this.manifest.animations)) {
       this.frames[name] = await Promise.all(paths.map((p) => this.loadImage(p)));
-      this.composed[name] = this.frames[name].map((img) =>
-        this.precompose(img, this.manifest!.windowSize)
-      );
+      this.composed[name] = this.frames[name].map((img) => this.precompose(img, size));
+      this.alphas[name] = this.frames[name].map((img) => this.alphaGrid(img, size));
     }
     const wa = this.manifest.workArea;
-    this.floor = wa.y + wa.height - this.manifest.windowSize;
+    this.floor = wa.y + wa.height - size;
+    this.standY = this.floor;
     this.x = wa.x + wa.width / 2;
     this.y = this.floor;
     await window.petApi.setPosition(this.x, this.y);
+    window.petApi.onWindowsUpdate((rects) => this.onWindows(rects));
     this.setState("idle");
     this.nextDecision = this.rand(2, 5);
     requestAnimationFrame((t) => this.tick(t));
@@ -179,6 +216,16 @@ class Pet {
     return canvas;
   }
 
+  private alphaGrid(img: HTMLImageElement, size: number): Uint8ClampedArray {
+    const canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(img, 0, 0, size, size);
+    return ctx.getImageData(0, 0, size, size).data;
+  }
+
   private rand(min: number, max: number): number {
     return min + Math.random() * (max - min);
   }
@@ -205,6 +252,11 @@ class Pet {
         this.vy = 0;
         this.sleepMax = this.rand(15, 40);
         break;
+      case "climb":
+        this.vx = 0;
+        this.vy = 0;
+        this.facing = 1;
+        break;
       case "jump":
       case "fall":
         break;
@@ -215,6 +267,15 @@ class Pet {
   }
 
   private decide(): void {
+    if (this.plan && this.plan.phase !== "roam") return;
+    if (this.edge) {
+      if (Math.random() < 0.35 && this.tryJumpToNearbyEdge()) return;
+      this.setState(Math.random() < 0.5 ? "walk" : "idle");
+      this.nextDecision = this.rand(2, 6);
+      return;
+    }
+    if (this.boredom > 70 && Math.random() < 0.3 && this.startPlan()) return;
+    if (this.boredom > 60 && Math.random() < 0.15 && this.tryJumpOntoLowEdge()) return;
     const weights: Array<[PetState, number]> = [];
     const w = (s: PetState, n: number): void => {
       weights.push([s, n]);
@@ -243,8 +304,173 @@ class Pet {
     this.setState(chosen);
   }
 
+  private startPlan(): boolean {
+    if (!this.manifest) return false;
+    const wa = this.manifest.workArea;
+    const ws = this.manifest.windowSize;
+    const candidates = this.windows.filter((w) => {
+      if (w.y <= wa.y || w.y >= this.floor - 40) return false;
+      if (this.floor - w.y > 700) return false;
+      if (w.x < wa.x + ws || w.x + w.width > wa.x + wa.width - ws) return false;
+      if (w.width < ws + 20) return false;
+      return true;
+    });
+    if (candidates.length === 0) return false;
+    const win = candidates[Math.floor(Math.random() * candidates.length)];
+    const side = Math.random() < 0.5 ? -1 : 1;
+    this.plan = { win, phase: "approach", side };
+    this.setState("walk");
+    return true;
+  }
+
+  private approachSideX(): number {
+    const ws = this.manifest!.windowSize;
+    const plan = this.plan!;
+    return plan.side === -1 ? plan.win.x - ws : plan.win.x + plan.win.width;
+  }
+
+  private startClimb(): void {
+    if (!this.plan || !this.manifest) return;
+    this.plan.phase = "climb";
+    this.climbTargetY = this.plan.win.y - this.manifest.windowSize;
+    this.x = this.approachSideX();
+    this.setState("climb");
+  }
+
+  private walkOff(): void {
+    this.edge = null;
+    this.plan = null;
+    this.standY = this.floor;
+    this.setState("fall");
+    this.nextDecision = this.rand(2, 5);
+  }
+
+  private landOnEdge(w: WindowRect, standY: number): void {
+    this.y = standY;
+    this.standY = standY;
+    this.edge = w;
+    this.vx = 0;
+    this.vy = 0;
+    this.jumpTarget = null;
+    this.jumpTargetWin = null;
+    this.plan = null;
+    this.setState("idle");
+    this.nextDecision = this.rand(2, 6);
+    void window.petApi.setPosition(this.x, this.y);
+  }
+
+  private findEdgeMatch(prev: WindowRect): WindowRect | null {
+    let best: WindowRect | null = null;
+    let bestDist = 50;
+    for (const w of this.windows) {
+      if (w.y >= this.floor - 4) continue;
+      if (Math.abs(w.y - prev.y) > 50) continue;
+      if (w.x + w.width < prev.x - 80 || w.x > prev.x + prev.width + 80) continue;
+      const dist = Math.abs(w.y - prev.y) + Math.abs(w.x - prev.x);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = w;
+      }
+    }
+    return best;
+  }
+
+  private onWindows(rects: WindowRect[]): void {
+    this.windows = rects.filter((w) => w.width > 24 && w.height > 24);
+    if (this.edge) {
+      const grounded = this.state !== "fall" && this.state !== "jump" && this.state !== "climb";
+      if (grounded) {
+        const match = this.findEdgeMatch(this.edge);
+        if (match) {
+          this.edge = match;
+          this.standY = match.y - this.manifest!.windowSize;
+          this.y = this.standY;
+          const size = this.manifest!.windowSize;
+          this.x = clamp(this.x, match.x + 2, match.x + match.width - size - 2);
+          void window.petApi.setPosition(this.x, this.y);
+        } else {
+          this.walkOff();
+        }
+      }
+    }
+    if (this.plan) {
+      const match = this.findEdgeMatch(this.plan.win);
+      if (match) {
+        this.plan.win = match;
+      } else {
+        this.plan = null;
+      }
+    }
+  }
+
+  private tryJumpToNearbyEdge(): boolean {
+    if (!this.edge || !this.manifest) return false;
+    const wa = this.manifest.workArea;
+    const ws = this.manifest.windowSize;
+    let best: WindowRect | null = null;
+    let bestScore = Infinity;
+    for (const w of this.windows) {
+      if (w === this.edge) continue;
+      if (w.y < wa.y - 80 || w.y >= this.floor - 4) continue;
+      const gap = this.x < w.x ? w.x - (this.x + ws) : this.x - (w.x + w.width);
+      if (gap < -30 || gap > 280) continue;
+      const dy = this.edge.y - w.y;
+      if (Math.abs(dy) > 260) continue;
+      const score = gap + Math.abs(dy);
+      if (score < bestScore) {
+        bestScore = score;
+        best = w;
+      }
+    }
+    if (!best) return false;
+    const targetY = best.y - ws;
+    const dir = best.x + best.width / 2 > this.x + ws / 2 ? 1 : -1;
+    this.edge = null;
+    this.standY = this.floor;
+    this.plan = null;
+    this.jumpTargetWin = best;
+    this.jumpTarget = { standY: targetY, minX: best.x, maxX: best.x + best.width };
+    this.setState("jump");
+    this.facing = dir;
+    this.vx = 220 * dir;
+    this.vy = targetY >= this.y ? -Math.sqrt(2 * GRAVITY * (targetY - this.y)) : -240;
+    this.boredom = clamp(this.boredom - 20, 0, 100);
+    return true;
+  }
+
+  private tryJumpOntoLowEdge(): boolean {
+    if (!this.manifest) return false;
+    const wa = this.manifest.workArea;
+    const ws = this.manifest.windowSize;
+    let best: WindowRect | null = null;
+    let bestGap = Infinity;
+    for (const w of this.windows) {
+      if (w.y <= wa.y || w.y >= this.floor - 40) continue;
+      const rise = this.floor - w.y;
+      if (rise < 40 || rise > 230) continue;
+      const gap = this.x < w.x ? w.x - (this.x + ws) : this.x - (w.x + w.width);
+      if (gap < -30 || gap > 320) continue;
+      if (gap < bestGap) {
+        bestGap = gap;
+        best = w;
+      }
+    }
+    if (!best) return false;
+    const targetY = best.y - ws;
+    this.plan = null;
+    this.jumpTargetWin = best;
+    this.jumpTarget = { standY: targetY, minX: best.x, maxX: best.x + best.width };
+    this.setState("jump");
+    this.facing = best.x + best.width / 2 > this.x + ws / 2 ? 1 : -1;
+    this.vx = 200 * this.facing;
+    this.vy = -Math.sqrt(2 * GRAVITY * (this.floor - targetY));
+    return true;
+  }
+
   private jump(dir: number, power: "play" | "flee"): void {
     this.setState("jump");
+    this.edge = null;
+    this.standY = this.floor;
     this.facing = dir;
     this.vx = (power === "play" ? JUMP_VX : FLEE_VX) * dir;
     this.vy = JUMP_VY;
@@ -257,6 +483,7 @@ class Pet {
 
   private scare(): void {
     this.setState("scared");
+    this.plan = null;
     this.facing = this.cursorSide();
     this.lastScaredAt = this.worldTime;
     this.hoverTime = 0;
@@ -275,9 +502,37 @@ class Pet {
     this.jump(dir, "flee");
   }
 
+  private overCat(offsetX: number, offsetY: number): boolean {
+    const alpha = this.currentAlpha;
+    const size = this.manifest?.windowSize ?? 0;
+    if (!alpha || size === 0) return false;
+    const x = Math.floor(offsetX);
+    const y = Math.floor(offsetY);
+    if (x < 0 || y < 0 || x >= size || y >= size) return false;
+    const sx = this.facing === 1 ? x : size - 1 - x;
+    return alpha[(y * size + sx) * 4 + 3] > 40;
+  }
+
+  private onMouseMove(e: MouseEvent): void {
+    if (this.dragging || !this.manifest) return;
+    const over = this.overCat(e.offsetX, e.offsetY);
+    if (over && !this.interactive) {
+      this.interactive = true;
+      void window.petApi.setInteractive(true);
+    } else if (!over && this.interactive) {
+      this.interactive = false;
+      void window.petApi.setInteractive(false);
+    }
+  }
+
   private onPointerDown(e: PointerEvent): void {
     this.dragging = true;
     this.hovering = false;
+    this.plan = null;
+    this.edge = null;
+    this.jumpTarget = null;
+    this.jumpTargetWin = null;
+    this.standY = this.floor;
     this.setState("grabbed");
     this.canvas.setPointerCapture(e.pointerId);
     this.grabOffsetX = e.offsetX;
@@ -329,6 +584,7 @@ class Pet {
         return -2.5;
       case "run":
       case "jump":
+      case "climb":
         return -3.5;
       case "catflip":
         return -0.5;
@@ -352,6 +608,7 @@ class Pet {
       case "curious":
         return -2;
       case "run":
+      case "climb":
         return -3;
       case "scared":
         return -1;
@@ -379,6 +636,7 @@ class Pet {
   private update(dt: number): void {
     if (this.dragging || !this.manifest) return;
     const wa = this.manifest.workArea;
+    const ws = this.manifest.windowSize;
     this.stateTime += dt;
 
     this.energy = clamp(this.energy + this.energyRate() * dt, 0, 100);
@@ -386,29 +644,72 @@ class Pet {
 
     if (this.state === "walk" || this.state === "run") {
       const speed = this.state === "run" ? RUN_SPEED : WALK_SPEED;
+      if (this.plan && this.plan.phase === "approach") {
+        const sideX = this.approachSideX();
+        this.facing = sideX > this.x ? 1 : -1;
+        this.vx = speed * this.facing;
+      }
       this.x += this.vx * dt;
-      if (this.x <= wa.x + 2) {
-        this.x = wa.x + 2;
-        this.facing = 1;
-        this.vx = speed;
-      } else if (this.x >= wa.x + wa.width - this.manifest.windowSize - 2) {
-        this.x = wa.x + wa.width - this.manifest.windowSize - 2;
-        this.facing = -1;
-        this.vx = -speed;
+      if (this.edge) {
+        const minX = this.edge.x + 1;
+        const maxX = this.edge.x + this.edge.width - ws - 1;
+        if (this.x < minX || this.x > maxX) {
+          this.walkOff();
+          return;
+        }
+      } else {
+        if (this.x <= wa.x + 2) {
+          this.x = wa.x + 2;
+          this.facing = 1;
+          this.vx = speed;
+        } else if (this.x >= wa.x + wa.width - ws - 2) {
+          this.x = wa.x + wa.width - ws - 2;
+          this.facing = -1;
+          this.vx = -speed;
+        }
+      }
+      if (this.plan && this.plan.phase === "approach" && Math.abs(this.x - this.approachSideX()) < 6) {
+        this.startClimb();
+        return;
+      }
+      void window.petApi.setPosition(this.x, this.y);
+    }
+
+    if (this.state === "climb") {
+      if (this.plan && this.plan.phase === "climb") {
+        this.x = this.approachSideX();
+        this.y -= CLIMB_SPEED * dt;
+        if (this.y <= this.climbTargetY) {
+          this.y = this.climbTargetY;
+          this.standY = this.y;
+          this.edge = this.plan.win;
+          this.plan.phase = "roam";
+          this.roamTime = 0;
+          this.roamMax = this.rand(4, 10);
+          this.x = clamp(
+            this.x,
+            this.edge.x + 4,
+            this.edge.x + this.edge.width - ws - 4
+          );
+          this.setState("walk");
+          return;
+        }
+      } else {
+        this.standY = this.floor;
+        this.setState("fall");
       }
       void window.petApi.setPosition(this.x, this.y);
     }
 
     if (this.state === "jump" || this.state === "fall") {
+      const prevBottom = this.y + ws;
       const g =
-        this.state === "fall"
-          ? FALL_BASE * Math.exp(FALL_EXP * this.stateTime)
-          : GRAVITY;
+        this.state === "fall" ? FALL_BASE * Math.exp(FALL_EXP * this.stateTime) : GRAVITY;
       this.vy += g * dt;
       this.vy = Math.min(this.vy, this.state === "fall" ? MAX_FALL_SPEED : 1600);
       this.x += this.vx * dt;
       this.y += this.vy * dt;
-      const maxX = wa.x + wa.width - this.manifest.windowSize - 2;
+      const maxX = wa.x + wa.width - ws - 2;
       if (this.x <= wa.x + 2) {
         this.x = wa.x + 2;
         this.vx = 0;
@@ -416,10 +717,37 @@ class Pet {
         this.x = maxX;
         this.vx = 0;
       }
+      const bottom = this.y + ws;
+      if (this.vy > 0) {
+        if (this.jumpTarget && this.y >= this.jumpTarget.standY) {
+          if (
+            this.x >= this.jumpTarget.minX - 2 &&
+            this.x <= this.jumpTarget.maxX - ws + 2 &&
+            this.jumpTargetWin
+          ) {
+            this.landOnEdge(this.jumpTargetWin, this.jumpTarget.standY);
+            return;
+          }
+          this.jumpTarget = null;
+          this.jumpTargetWin = null;
+        }
+        for (const w of this.windows) {
+          if (w.y < wa.y - 80 || w.y >= this.floor - 4) continue;
+          if (bottom >= w.y && prevBottom <= w.y + 2) {
+            if (this.x + ws > w.x + 6 && this.x < w.x + w.width - 6) {
+              this.landOnEdge(w, w.y - ws);
+              return;
+            }
+          }
+        }
+      }
       if (this.y >= this.floor) {
         this.y = this.floor;
         this.vx = 0;
         this.vy = 0;
+        this.jumpTarget = null;
+        this.jumpTargetWin = null;
+        this.standY = this.floor;
         this.setState("landing");
         this.nextDecision = this.rand(1, 3);
       } else {
@@ -443,10 +771,25 @@ class Pet {
 
     this.nextDecision -= dt;
     if (this.nextDecision <= 0) {
-      if (this.state === "idle" || this.state === "walk" || this.state === "sit") {
+      if (
+        !this.plan &&
+        (this.state === "idle" || this.state === "walk" || this.state === "sit")
+      ) {
         this.decide();
       }
       this.nextDecision = this.rand(3, 10);
+    }
+
+    if (this.plan && this.plan.phase === "roam") {
+      this.roamTime += dt;
+      if (this.roamTime >= this.roamMax) {
+        this.plan = null;
+        if (Math.random() < 0.4 && this.tryJumpToNearbyEdge()) {
+          // jumped to another window
+        } else {
+          this.walkOff();
+        }
+      }
     }
 
     if (this.hovering) {
@@ -476,6 +819,7 @@ class Pet {
     const key = `${anim}:${index}:${this.facing}`;
     if (key === this.lastDrawKey) return;
     this.lastDrawKey = key;
+    this.currentAlpha = this.alphas[anim]?.[index] ?? null;
     const composed = this.composed[anim]?.[index];
     if (!composed) return;
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
