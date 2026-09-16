@@ -1,6 +1,6 @@
 # Mini — Document maître
 
-Mis à jour le 2026-09-14.
+Mis à jour le 2026-09-16.
 
 ## But
 
@@ -10,7 +10,8 @@ L'identité, la mémoire et les procédures doivent persister quand le modèle c
 
 ## État courant
 
-- Projet au stade du cadrage : cahier des charges, documentation et design du pet ; aucun code applicatif.
+- Cahier des charges, documentation et design du pet établis ; premier code applicatif introduit le 2026-09-16 : le pet de bureau (`apps/pet`, Electron + TypeScript).
+- Pet phase 1 validée le 2026-09-16 : fenêtre transparente, idle, marche, drag et gravité confirmés visuellement par l'utilisateur ; RAM mesurée (voir `VALIDATION_LOG.md`). Bug de chargement du renderer corrigé (module ES séparé de Node).
 - Ollama 0.33.3 et Qwen 3.5 2B opérationnels. Hermes Agent 0.21.2 installé et relié au modèle local ; premier échange intégré réussi. Le 2026-09-14, appels d'outils validés en exécution réelle (file, terminal, vision), chaînes courtes d'outils réussies (chemins absolus) et garde-fous d'approbation vérifiés en dry-run ; RAM minimale observée ~1,4 Go libres avec modèle chargé et Hermes actif. DeepSeek non activé.
 - Design du pet validé le 2026-09-14 : `docs/DESIGN_PET.md` (chat autonome, Electron + TypeScript, démarrage désactivable).
 - Socle documentaire publié sur https://github.com/kinowill/Mini (`main`, commit initial `043bc53`) ; synchronisation vérifiée, preuves dans `VALIDATION_LOG.md`.
@@ -58,16 +59,18 @@ pour les runs avec outils.
 6. `AGENTS.md` : spécificités locales complétant le protocole global complet v1.4.
 7. `README.md` : point d'entrée du dépôt.
 
-Il n'existe encore ni code applicatif, ni migration, ni déploiement.
+8. `apps/pet` : code source du pet de bureau (Electron + TypeScript), phase 1 validée.
+
+Il n'existe encore ni migration, ni déploiement, ni publication du pet.
 
 ## Prochain chantier
 
-Le pet est conçu (un chat, Electron + TypeScript, design validé). Prochaine
-étape avant tout code : vérifier les références GitHub citées dans le document
-externe et les licences d'assets, puis démarrer la phase 1 du pet (fenêtre
-transparente, idle, marche, drag, gravité, mesure RAM). Périmètre V1 et
-phases détaillées dans `docs/DESIGN_PET.md` ; la marge RAM (~1,4 Go libres en
-activité) sera re-mesurée avec le pet lancé.
+Le pet est conçu (un chat, Electron + TypeScript, design validé). La phase 1
+(fenêtre transparente, idle, marche, drag, gravité, mesure RAM) est codée dans
+`apps/pet` et validée le 2026-09-16. Prochaine phase : environnement Windows
+(barre des tâches, bords, DPI), puis vie féline. Périmètre V1 et phases
+détaillées dans `docs/DESIGN_PET.md` ; la marge RAM sera re-mesurée à chaque
+phase. Le pet se lance avec `npm start` depuis `apps/pet`.
 Qwen 3.5 2B reste un candidat : premier appel 66,36 s (dont 45,21 s de chargement),
 puis 0,38 et 0,27 s ; 32–42 tokens/s, contexte 4096, partage CPU/GPU 37 %/63 %.
 Ces essais courts ne valident ni les tâches longues, ni les outils, ni la mémoire.

@@ -15,8 +15,12 @@ Révision du protocole global : a24f2443f64b09932a27db7343a87f6b18b86e05.
 - Les sprites du pet vivent hors Git dans `runtime/pet-assets/` (usage
   personnel uniquement) ; ne jamais les versionner.
 - Ne pas présenter les capacités du cahier des charges comme déjà fonctionnelles.
-- Aucun script de build ou de test applicatif n'existe encore. Définir les contrôles
-  adaptés lorsque le premier composant sera introduit.
+- App du pet : `apps/pet` (Electron + TypeScript). Commandes : `npm run check`
+  (typecheck, deux configs : main/preload en Node16, renderer en module ES),
+  `npm run build` (compilation), `npm start` (lancement). Pour voir les erreurs
+  console du renderer, lancer avec `--enable-logging` et redirections séparées
+  (`Start-Process`, pas de `2>&1` sous PowerShell 5.1). Les sprites vivent hors
+  Git dans `runtime/pet-assets/Black-Cat-Shimeji/assets`.
 - Forge : https://github.com/kinowill/Mini ; branche initiale `main`.
 - Ne jamais versionner les clés API, conversations personnelles, mémoires réelles,
   modèles téléchargés ou identifiants de comptes.

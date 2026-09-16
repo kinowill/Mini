@@ -1,6 +1,6 @@
 # Roadmap — Mini / assistant personnel JARVIS
 
-Dernière mise à jour : 2026-09-14.
+Dernière mise à jour : 2026-09-16.
 
 ## Sources et état
 
@@ -9,6 +9,7 @@ Dernière mise à jour : 2026-09-14.
 - Dossier initial : cahier des charges uniquement ; socle documentaire et Git ajoutés, aucun code applicatif.
 - Ollama, Qwen 3.5 2B et Hermes : échanges, outils et chaînes validés en local ; DeepSeek désactivé.
 - Design du pet de bureau : `docs/DESIGN_PET.md`, validé le 2026-09-14.
+- Pet phase 1 codée dans `apps/pet` et validée le 2026-09-16 (comportements confirmés visuellement, RAM mesurée).
 - Production et validation comportementale : non établies.
 
 ## Objectif courant
@@ -28,7 +29,7 @@ silencieux et désactivable.
 - [x] Concevoir le pet (décisions produit, design écrit dans `docs/DESIGN_PET.md`).
 - [x] Vérifier les références GitHub citées (existence, licence, activité).
 - [x] Trouver des sprites de chat : pack Black-Cat-Shimeji retenu (34 animations, 16×16 px), stocké hors Git dans `runtime/pet-assets/` pour usage personnel.
-- [ ] Pet phase 1 : fenêtre transparente, idle, marche, drag, gravité ; mesure RAM.
+- [x] Pet phase 1 : fenêtre transparente, idle, marche, drag, gravité ; mesure RAM.
 - [ ] Pet phase 2 : environnement Windows (barre des tâches, bords, DPI).
 - [ ] Pet phase 3 : vie féline (sommeil, étirements, réactions souris).
 - [ ] Pet phase 4 : Pet Controller (state machine, besoins, cooldowns).
@@ -136,6 +137,21 @@ intact, aucune donnée personnelle, aucun secret versionné, aucune action
 système depuis le pet. Contrôles : lancement/fermeture propres, RAM mesurée,
 comportement observé sans modèle chargé, réception d'un événement Hermes
 réel, autostart activé puis désactivé testés. Détails : `docs/DESIGN_PET.md`.
+
+## Chantier — Pet phase 1 — résultats
+
+Exécuté le 2026-09-16, preuves et détails dans `VALIDATION_LOG.md` ; code dans
+`apps/pet` (Electron + TypeScript, TypeScript 7, Electron 44).
+- Build et typecheck passent (`npm run check`, `npm run build`).
+- Bug trouvé au premier lancement : le renderer compilé en CommonJS échouait
+  (`exports is not defined`) car chargé comme script de navigateur. Corrigé en
+  compilant le renderer en module ES séparé (deux tsconfigs, `type="module"`).
+- Comportements validés visuellement par l'utilisateur : fenêtre transparente
+  visible, animations idle/marche autonomes, drag souris, gravité au lâcher.
+- RAM mesurée : 2 554 Mo libres avant lancement, 2 336 Mo pendant (~300 Mo
+  pour les 4 processus Electron), 2 574 Mo après fermeture.
+- Limites : pas de bouton fermer (fermeture par arrêt du processus ; le menu
+  tray arrive en phase 6) ; un seul lancement mesuré ; pas de test longue durée.
 
 ## Chantier — vérification des références et licences — critères
 

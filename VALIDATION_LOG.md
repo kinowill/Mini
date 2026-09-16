@@ -1,5 +1,41 @@
 # Journal de validation — Mini
 
+## 2026-09-16 — Pet phase 1 : lancement, correction et validation
+
+- Départ : commit `61dab0b`, main propre et aligné sur origin. Découverte d'un
+  dossier `apps/pet` non suivi (créé le 2026-09-14, jamais committé ni
+  documenté) : squelette Electron + TypeScript du pet, `dist/` compilé présent.
+- Vérifications statiques : `npm run check` et `npm run build` passent ; la
+  couche fichiers du manifest d'animations résout correctement les 34
+  animations du pack Black-Cat-Shimeji (`stand_idle` 4 frames, `walk` 4,
+  `falling` 1, `grabbed` 2).
+- Premier lancement : 4 processus Electron actifs mais rien à l'écran. Logs
+  renderer (`--enable-logging`, redirections séparées) : `Uncaught
+  ReferenceError: exports is not defined` dans `dist/renderer.js`. Cause : le
+  renderer était compilé en CommonJS (module Node16) mais chargé comme script
+  de navigateur dans `index.html` ; il plantait avant tout dessin, laissant la
+  fenêtre transparente vide.
+- Correction : compilation séparée du renderer en module ES
+  (`tsconfig.renderer.json`, module ESNext + resolution bundler), `main.ts` et
+  `preload.ts` restent en Node16 CommonJS, balise `type="module"` dans
+  `index.html`, `export {}` dans `renderer.ts` (sinon `declare global` est
+  interdit en script). Typecheck et build passent après correction.
+- Second lancement : aucun message d'erreur console. L'utilisateur a confirmé
+  visuellement : chat visible et animé (son wallpaper noir masquait la fenêtre
+  au premier essai), alternance idle/marche autonome, drag à la souris,
+  gravité au lâcher. Tous les critères de la phase 1 sont observés.
+- RAM : 2 554 Mo libres avant lancement → 2 336 Mo pendant (4 processus
+  Electron, ~286-300 Mo au total) → 2 574 Mo après fermeture.
+- Limites : fermeture par arrêt du processus (aucun bouton fermer ni tray, ce
+  sont les phases suivantes) ; une seule session de lancement mesurée ; pas de
+  test longue durée ni de second écran/DPI.
+- Documents mis à jour : `MASTER.md`, `ROADMAP.md`, `AGENTS.md`, présent
+  journal.
+- États : repo modifié (code `apps/pet` + documentation, commits séparés) ;
+  validation réelle effectuée (observations utilisateur + mesures) ;
+  production applicative non applicable (application de bureau locale, non
+  déployée).
+
 ## 2026-09-14 — Recherche et choix des sprites du pet
 
 - Départ : commit `f22ff27`, main propre et aligné sur origin.
