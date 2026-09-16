@@ -33,7 +33,7 @@ affiche les états de Hermes, avec démarrage Windows silencieux et désactivabl
 - [x] Halo de visibilité du sprite sur fond sombre (validé 2026-09-16).
 - [ ] Pet phase 2 : vérifier le rendu DPI (netteté du pixel art) ; multi-écran repoussé au backlog (un seul écran confirmé).
 - [x] Pet phase 3 : vie féline + Pet Controller (sommeil, toilette, étirements, sauts, réactions souris, besoins énergie/ennui, décisions pondérées).
-- [ ] Pet phase 4 : escalade des fenêtres (veilleur Win32 koffi, bords supérieurs et côtés, sauts entre fenêtres, suivi/chute, clics traversants).
+- [x] Pet phase 4 : escalade des fenêtres (veilleur Win32 koffi, bords supérieurs et côtés, sauts entre fenêtres, suivi/chute, clics traversants).
 - [ ] Pet phase 5 : câblage Hermes (protocole d'événements, états affichés).
 - [ ] Pet phase 6 : menu tray, démarrage Windows silencieux et désactivable.
 - [ ] Pet phase 7 : assets sous licence vérifiée et polissage.
@@ -202,6 +202,24 @@ Exécuté le 2026-09-16, validation visuelle par l'utilisateur, preuves dans
   l'autre, chute à la fermeture, suivi au déplacement, clic qui atteint
   l'application sous le chat, drag toujours possible, RAM et CPU mesurés.
   Détail de conception : `docs/DESIGN_PET.md`.
+
+## Chantier — Escalade des fenêtres — résultats
+
+Exécuté le 2026-09-16, validation visuelle par l'utilisateur, preuves dans
+`VALIDATION_LOG.md`.
+- Veilleur Win32 : `koffi` (import dynamique, ESM) + `EnumWindows` toutes
+  les ~1,5 s ; filtres visibilité, minimisation, cloaking DWM, fenêtres
+  outils et propre processus ; géométrie uniquement.
+- Comportements validés par l'utilisateur : marche sur le bord supérieur
+  d'une fenêtre, chute quand la fenêtre est fermée, clics traversants (le
+  clic atteint l'application sauf sur le corps du chat), non-régression
+  phase 3 complète (marche, drag, sommeil, réactions souris).
+- À re-observer sur la durée : grimpe d'un côté (déclenchée par l'ennui),
+  chute au bout du bord, suivi d'une fenêtre déplacée, sauts entre bords.
+- CPU mesuré ~6,9 % d'un cœur avec l'escalade active, RAM ~340 Mo.
+- Incident corrigé en séance : appels koffi (`DwmGetWindowAttribute` : 4
+  arguments requis, `_Out_ void *` ambigu → `_Out_ uint32 *`), et
+  `koffi.register` attend un pointeur vers le proto de callback.
 
 ## Chantier — vérification des références et licences — critères
 

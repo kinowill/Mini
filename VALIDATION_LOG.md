@@ -1,5 +1,40 @@
 # Journal de validation — Mini
 
+## 2026-09-16 — Pet phase 4 : escalade des fenêtres
+
+- Départ : commit `7198bab`, main propre et aligné sur origin.
+- Nouvelle dépendance : `koffi` 3.3.0 (`npm install`, script d'installation
+  natif exécuté manuellement car bloqué par défaut). koffi est ESM
+  uniquement : import dynamique depuis le main compilé en CommonJS.
+- Veilleur Win32 (`src/windows.ts`, processus principal) : `EnumWindows`
+  toutes les ~1,5 s avec filtres (visible, non minimisée, non cloaked via
+  `DwmGetWindowAttribute`, pas de fenêtre outil, pas le processus du pet) ;
+  **uniquement les rectangles** — ni titres, ni contenu, ni captures.
+  Incidents koffi corrigés en séance : `koffi.register` exige un pointeur
+  vers le proto (`koffi.pointer(WNDENUMPROC)`) ; `DwmGetWindowAttribute`
+  exige ses 4 arguments ; `_Out_ void *` rejeté → `_Out_ uint32 *`.
+  Preuve chiffrée : 388 fenêtres énumérées, 1 conservée (fenêtre visible du
+  moment), rects transmis au renderer par IPC.
+- Renderer : plateformes = bords supérieurs des fenêtres + côtés ; grimpe
+  (`climb_front`, 90 px/s) quand l'ennui est élevé ; marche sur les bords ;
+  chute au bout ; chute à la fermeture ; suivi d'une fenêtre déplacée
+  (re-captage à chaque mise à jour) ; atterrissage sur un bord croisé en
+  chute ; sauts vers un bord voisin.
+- Clics traversants : `setIgnoreMouseEvents(true, { forward: true })` en
+  permanence ; hit-test sur les pixels opaques du sprite (grilles alpha
+  précalculées au chargement) ; réactivation de la souris uniquement sur le
+  corps du chat, re-coupure à la sortie.
+- Validation utilisateur : marche sur le bord supérieur, chute à la
+  fermeture, clics traversants et non-régression phase 3 confirmés.
+  Grimpe d'un côté, chute au bout du bord, suivi au déplacement et sauts
+  entre bords restent à re-observer sur la durée.
+- Mesures : CPU ~6,9 % d'un cœur (30 s, escalade active), RAM ~340 Mo pour
+  4 processus, ~3,5 Go de RAM libre machine.
+- Documents mis à jour : `MASTER.md`, `ROADMAP.md`, `docs/DESIGN_PET.md`,
+  `AGENTS.md`, présent journal.
+- États : repo modifié (code + documentation, commits séparés) ; validation
+  réelle effectuée ; production applicative non applicable.
+
 ## 2026-09-16 — Pet phase 3 : vie féline et Pet Controller
 
 - Départ : commit `c557465`, main propre et aligné sur origin.

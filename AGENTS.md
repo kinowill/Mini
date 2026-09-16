@@ -24,6 +24,10 @@ Révision du protocole global : a24f2443f64b09932a27db7343a87f6b18b86e05.
   console du renderer, lancer avec `--enable-logging` et redirections séparées
   (`Start-Process`, pas de `2>&1` sous PowerShell 5.1). Les sprites vivent hors
   Git dans `runtime/pet-assets/Black-Cat-Shimeji/assets`.
+- `koffi` (accès Win32 pour les fenêtres) est ESM uniquement : dans le main
+  CommonJS, utiliser un import dynamique. Après un `npm install`, si le binaire
+  natif manque, relancer `node cnoke.cjs -P . -D src/koffi --prebuild --release`
+  dans `node_modules/koffi`.
 - Forge : https://github.com/kinowill/Mini ; branche initiale `main`.
 - Ne jamais versionner les clés API, conversations personnelles, mémoires réelles,
   modèles téléchargés ou identifiants de comptes.

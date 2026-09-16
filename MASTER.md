@@ -14,6 +14,7 @@ L'identité, la mémoire et les procédures doivent persister quand le modèle c
 - Pet phase 1 validée le 2026-09-16 : fenêtre transparente, idle, marche, drag et gravité confirmés visuellement par l'utilisateur ; RAM mesurée (voir `VALIDATION_LOG.md`). Bug de chargement du renderer corrigé (module ES séparé de Node).
 - Halo de visibilité ajouté et validé le 2026-09-16 : le chat noir est lisible sur fond noir (silhouette blanche floutée).
 - Pet phase 3 (vie féline + Pet Controller) codée et validée le 2026-09-16 : sommeil/veille, toilette, étirements, boule, course, roulade, perplexe, atterrissage, réactions souris ; chute exponentielle ; CPU ~4 % d'un cœur, RAM ~320 Mo. Saut autonome et creusage retirés (décisions utilisateur).
+- Pet phase 4 (escalade des fenêtres) codée et validée le 2026-09-16 : veilleur Win32 `koffi` (géométrie seule), grimpe des côtés, marche sur les bords, chute à la fermeture, clics traversants ; CPU ~6,9 % d'un cœur, RAM ~340 Mo.
 - Vie féline et escalade des fenêtres conçues et arbitrées le 2026-09-16 (skill brainstorming) : géométrie des fenêtres via `koffi` + Win32, cerveau du chat dans le renderer, clics traversants, besoins énergie/ennui. Détail : `docs/DESIGN_PET.md`.
 - Ollama 0.33.3 et Qwen 3.5 2B opérationnels. Hermes Agent 0.21.2 installé et relié au modèle local ; premier échange intégré réussi. Le 2026-09-14, appels d'outils validés en exécution réelle (file, terminal, vision), chaînes courtes d'outils réussies (chemins absolus) et garde-fous d'approbation vérifiés en dry-run ; RAM minimale observée ~1,4 Go libres avec modèle chargé et Hermes actif. DeepSeek non activé.
 - Design du pet validé le 2026-09-14 : `docs/DESIGN_PET.md` (chat autonome, Electron + TypeScript, démarrage désactivable).
@@ -73,14 +74,15 @@ Il n'existe encore ni migration, ni déploiement, ni publication du pet.
 ## Prochain chantier
 
 Le pet est conçu (un chat, Electron + TypeScript, design validé). Les phases 1
-(fenêtre, déplacements, gravité) et 3 (vie féline : besoins, décisions,
-réactions souris) sont codées dans `apps/pet` et validées le 2026-09-16.
-Prochain chantier : escalade des fenêtres (phase 4) — veilleur Win32 (`koffi`
-+ `EnumWindows`), bords supérieurs et côtés, grimpe, sauts entre fenêtres,
-suivi/chute, clics traversants. Le contrôle DPI (phase 2) sera fait au
-passage ; multi-écran au backlog. Critères : `ROADMAP.md` ; conception :
-`docs/DESIGN_PET.md`. Le pet se lance avec `npm start` depuis `apps/pet`
-(ou `electron.exe` direct, sans fenêtre console).
+(fenêtre, déplacements, gravité), 3 (vie féline : besoins, décisions,
+réactions souris) et 4 (escalade des fenêtres) sont codées dans `apps/pet` et
+validées le 2026-09-16. Prochain chantier : câblage Hermes (phase 5) — le pet
+affiche les états de Hermes via le protocole d'événements (transport à
+choisir). Ensuite tray/autostart (phase 6). Le contrôle DPI reste à vérifier
+formellement (rendu à 100 % observé) ; multi-écran au backlog. Critères :
+`ROADMAP.md` ; conception : `docs/DESIGN_PET.md`. Le pet se lance avec
+`npm start` depuis `apps/pet` (ou `electron.exe` direct, sans fenêtre
+console).
 Qwen 3.5 2B reste un candidat : premier appel 66,36 s (dont 45,21 s de chargement),
 puis 0,38 et 0,27 s ; 32–42 tokens/s, contexte 4096, partage CPU/GPU 37 %/63 %.
 Ces essais courts ne valident ni les tâches longues, ni les outils, ni la mémoire.

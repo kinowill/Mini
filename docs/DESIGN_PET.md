@@ -173,10 +173,11 @@ Conçue avec l'utilisateur (skill brainstorming), avant tout code.
 - **États** : `idle`, `sit`, `loaf` (boule), `sleep` (couché puis assoupi),
   `groom` (toilette), `stretch` (étirement/bâillement au réveil), `walk`,
   `run` (ennui élevé), `catflip` (roulade), `confused` (perplexe), `landing`
-  (après chute), `curious`/`scared` (réactions souris), `fall`, `grabbed`.
-  Saut autonome retiré (arbitré 2026-09-16) : `jump` ne sert plus qu'à la
-  fuite effrayée. `dig` retiré (arbitré 2026-09-16, rendu ambigu).
-  `climb` reste pour l'escalade (chantier B).
+  (après chute), `climb` (grimpe le long d'un côté de fenêtre, chantier B
+  validé), `curious`/`scared` (réactions souris), `fall`, `grabbed`.
+  Saut autonome retiré (arbitré 2026-09-16) : `jump` ne sert plus qu'aux
+  sauts entre fenêtres et à la fuite effrayée. `dig` retiré (arbitré
+  2026-09-16, rendu ambigu).
 - **Besoins** (0-100, invisibles) : `énergie` (baisse en marchant/grimpant,
   remonte en dormant), `ennui` (monte avec le temps, baisse en explorant).
 - **Boucle de décision** : toutes les 3-10 s, choix pondéré par les besoins ;
@@ -205,6 +206,26 @@ Conçue avec l'utilisateur (skill brainstorming), avant tout code.
 - Perf : halo et sprite précomposés par frame au chargement ; redessin
   uniquement quand la frame affichée change ; mesuré : ~4 % d'un cœur de CPU
   en moyenne, ~320 Mo de RAM pour 4 processus.
+
+### Escalade des fenêtres — validée le 2026-09-16
+
+- Veilleur Win32 dans le processus principal : `koffi` (ESM uniquement, donc
+  import dynamique depuis le main CommonJS) + `EnumWindows` toutes les
+  ~1,5 s ; filtres : visible, non minimisée, non cloaked (DWM), pas une
+  fenêtre outil, pas le processus du pet. **Géométrie uniquement** : jamais
+  de titres ni de contenu.
+- Plateformes : bord supérieur de chaque fenêtre (le chat s'y tient) et
+  côtés pour grimper (`climb_front`, 90 px/s) ; il grimpe un côté jusqu'au
+  bord quand il s'ennuie, marche dessus, tombe au bout, saute vers un bord
+  voisin proche.
+- Fenêtre fermée sous lui → chute ; fenêtre déplacée sous lui → il suit
+  (re-captage toutes les 1,5 s) ; chute atterrit sur le bord d'une fenêtre
+  croisée en route.
+- Clics traversants : `setIgnoreMouseEvents(true, { forward: true })` en
+  permanence ; le renderer reçoit les mouvements, teste les pixels opaques
+  du sprite (grilles alpha précalculées) et réactive la souris uniquement
+  sur le corps du chat, puis re-coupe à la sortie.
+- Mesuré avec l'escalade active : CPU ~6,9 % d'un cœur, RAM ~340 Mo.
 
 ### Perf, confidentialité et sécurité
 
