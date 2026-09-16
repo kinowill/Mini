@@ -269,12 +269,12 @@ class Pet {
   private decide(): void {
     if (this.plan && this.plan.phase !== "roam") return;
     if (this.edge) {
-      if (Math.random() < 0.35 && this.tryJumpToNearbyEdge()) return;
+      if (Math.random() < 0.5 && this.tryJumpToNearbyEdge()) return;
       this.setState(Math.random() < 0.5 ? "walk" : "idle");
       this.nextDecision = this.rand(2, 6);
       return;
     }
-    if (this.boredom > 70 && Math.random() < 0.3 && this.startPlan()) return;
+    if (this.boredom > 65 && Math.random() < 0.5 && this.startPlan()) return;
     if (this.boredom > 60 && Math.random() < 0.15 && this.tryJumpOntoLowEdge()) return;
     const weights: Array<[PetState, number]> = [];
     const w = (s: PetState, n: number): void => {
@@ -310,7 +310,6 @@ class Pet {
     const ws = this.manifest.windowSize;
     const candidates = this.windows.filter((w) => {
       if (w.y <= wa.y || w.y >= this.floor - 40) return false;
-      if (this.floor - w.y > 700) return false;
       if (w.x < wa.x + ws || w.x + w.width > wa.x + wa.width - ws) return false;
       if (w.width < ws + 20) return false;
       return true;
@@ -343,6 +342,16 @@ class Pet {
     this.standY = this.floor;
     this.setState("fall");
     this.nextDecision = this.rand(2, 5);
+  }
+
+  private hopDown(): void {
+    this.edge = null;
+    this.plan = null;
+    this.standY = this.floor;
+    this.setState("jump");
+    this.facing = Math.random() < 0.5 ? 1 : -1;
+    this.vx = 150 * this.facing;
+    this.vy = -200;
   }
 
   private landOnEdge(w: WindowRect, standY: number): void {
@@ -619,7 +628,7 @@ class Pet {
       case "loaf":
         return 0.4;
       default:
-        return 0.8;
+        return 1.0;
     }
   }
 
@@ -784,8 +793,11 @@ class Pet {
       this.roamTime += dt;
       if (this.roamTime >= this.roamMax) {
         this.plan = null;
-        if (Math.random() < 0.4 && this.tryJumpToNearbyEdge()) {
+        const r = Math.random();
+        if (r < 0.4 && this.tryJumpToNearbyEdge()) {
           // jumped to another window
+        } else if (r < 0.7) {
+          this.hopDown();
         } else {
           this.walkOff();
         }
