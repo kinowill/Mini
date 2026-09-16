@@ -1,5 +1,21 @@
 # Journal de validation — Mini
 
+## 2026-09-16 — Réglages d'escalade (fin de session)
+
+- Départ : commit `02a50fc`, main propre.
+- Cause trouvée : le chat ne grimpait jamais car une limite de hauteur
+  (700 px) excluait la fenêtre ouverte de l'utilisateur (~890 px de haut).
+  Limite retirée ; la grimpe démarre plus souvent (ennui > 65, 50 % de
+  chance par décision, ennui monte à 1,0/s) ; saut fenêtre → fenêtre 50 % ;
+  nouveau comportement : hop vers le sol depuis un bord (30 % en fin de
+  déambulation, au lieu de toujours tomber du bout).
+- État : build et typecheck passent, pet relancé ; comportements non encore
+  re-validés visuellement par l'utilisateur (session terminée avant
+  observation). À re-vérifier en début de prochaine session : grimpe,
+  sauts entre fenêtres, hop vers le sol, suivi/chute.
+- États : repo modifié (code + présent journal, commits séparés) ;
+  production applicative non applicable.
+
 ## 2026-09-16 — Pet phase 4 : escalade des fenêtres
 
 - Départ : commit `7198bab`, main propre et aligné sur origin.

@@ -220,6 +220,10 @@ Exécuté le 2026-09-16, validation visuelle par l'utilisateur, preuves dans
 - Incident corrigé en séance : appels koffi (`DwmGetWindowAttribute` : 4
   arguments requis, `_Out_ void *` ambigu → `_Out_ uint32 *`), et
   `koffi.register` attend un pointeur vers le proto de callback.
+- Réglages de fin de séance (à re-valider) : limite de hauteur de grimpe
+  retirée (les grandes fenêtres étaient exclues), explorations plus
+  fréquentes (ennui > 65, 50 %), saut fenêtre → fenêtre 50 %, hop vers le
+  sol depuis un bord (30 %).
 
 ## Chantier — vérification des références et licences — critères
 
