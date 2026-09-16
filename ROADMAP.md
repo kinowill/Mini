@@ -15,8 +15,8 @@ Dernière mise à jour : 2026-09-16.
 ## Objectif courant
 
 Construire le pet de bureau V1 : un chat autonome (Electron + TypeScript) qui
-vit sur le bureau et affiche les états de Hermes, avec démarrage Windows
-silencieux et désactivable.
+vit sa vie sur le bureau (sommeil, toilette, sauts, escalade des fenêtres) et
+affiche les états de Hermes, avec démarrage Windows silencieux et désactivable.
 
 ## Prochaines tâches
 
@@ -30,9 +30,10 @@ silencieux et désactivable.
 - [x] Vérifier les références GitHub citées (existence, licence, activité).
 - [x] Trouver des sprites de chat : pack Black-Cat-Shimeji retenu (34 animations, 16×16 px), stocké hors Git dans `runtime/pet-assets/` pour usage personnel.
 - [x] Pet phase 1 : fenêtre transparente, idle, marche, drag, gravité ; mesure RAM.
-- [ ] Pet phase 2 : environnement Windows (barre des tâches, bords, DPI).
-- [ ] Pet phase 3 : vie féline (sommeil, étirements, réactions souris).
-- [ ] Pet phase 4 : Pet Controller (state machine, besoins, cooldowns).
+- [x] Halo de visibilité du sprite sur fond sombre (validé 2026-09-16).
+- [ ] Pet phase 2 : vérifier le rendu DPI (netteté du pixel art) ; multi-écran repoussé au backlog (un seul écran confirmé).
+- [ ] Pet phase 3 : vie féline + Pet Controller (sommeil, toilette, étirements, sauts, réactions souris, besoins énergie/ennui, décisions pondérées).
+- [ ] Pet phase 4 : escalade des fenêtres (veilleur Win32 koffi, bords supérieurs et côtés, sauts entre fenêtres, suivi/chute, clics traversants).
 - [ ] Pet phase 5 : câblage Hermes (protocole d'événements, états affichés).
 - [ ] Pet phase 6 : menu tray, démarrage Windows silencieux et désactivable.
 - [ ] Pet phase 7 : assets sous licence vérifiée et polissage.
@@ -152,6 +153,34 @@ Exécuté le 2026-09-16, preuves et détails dans `VALIDATION_LOG.md` ; code dan
   pour les 4 processus Electron), 2 574 Mo après fermeture.
 - Limites : pas de bouton fermer (fermeture par arrêt du processus ; le menu
   tray arrive en phase 6) ; un seul lancement mesuré ; pas de test longue durée.
+
+## Chantier — Vie féline + Pet Controller — critères
+
+- Résultat attendu : le chat alterne repos et activité par lui-même — cycles
+  sommeil → réveil → étirement → toilette, sauts, réactions à la souris
+  (curiosité, fuite) — pilotés par des besoins internes (énergie, ennui) et
+  des décisions pondérées toutes les 3-10 s ; équilibre ~60 % calme /
+  ~40 % actif.
+- À préserver : comportements phase 1 (idle, marche, drag, gravité), halo de
+  visibilité, aucune donnée personnelle, aucun réseau, pas d'action système.
+- Contrôles : build et typecheck ; cycle sommeil/réveil observé ; sauts et
+  réactions souris observés ; RAM et CPU mesurés (chat endormi et actif) ;
+  non-régression phase 1 confirmée par l'utilisateur. Détail de conception :
+  `docs/DESIGN_PET.md`.
+
+## Chantier — Escalade des fenêtres — critères
+
+- Résultat attendu : le chat monte sur le bord supérieur des fenêtres des
+  applications (y compris la fenêtre active), grimpe par leurs côtés, passe
+  d'une fenêtre à l'autre, suit une fenêtre déplacée, tombe quand elle
+  disparaît ; les clics traversent le chat sauf sur son corps.
+- À préserver : vie féline validée, géométrie uniquement (jamais de titres ni
+  de contenu, aucune capture), appels Win32 limités (`EnumWindows`,
+  `GetWindowRect`, `IsIconic`, `DwmGetWindowAttribute`), aucun réseau.
+- Contrôles : montée sur une fenêtre réelle observée, passage d'une fenêtre à
+  l'autre, chute à la fermeture, suivi au déplacement, clic qui atteint
+  l'application sous le chat, drag toujours possible, RAM et CPU mesurés.
+  Détail de conception : `docs/DESIGN_PET.md`.
 
 ## Chantier — vérification des références et licences — critères
 

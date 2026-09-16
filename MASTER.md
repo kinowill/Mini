@@ -12,6 +12,8 @@ L'identité, la mémoire et les procédures doivent persister quand le modèle c
 
 - Cahier des charges, documentation et design du pet établis ; premier code applicatif introduit le 2026-09-16 : le pet de bureau (`apps/pet`, Electron + TypeScript).
 - Pet phase 1 validée le 2026-09-16 : fenêtre transparente, idle, marche, drag et gravité confirmés visuellement par l'utilisateur ; RAM mesurée (voir `VALIDATION_LOG.md`). Bug de chargement du renderer corrigé (module ES séparé de Node).
+- Halo de visibilité ajouté et validé le 2026-09-16 : le chat noir est lisible sur fond noir (silhouette blanche floutée).
+- Vie féline et escalade des fenêtres conçues et arbitrées le 2026-09-16 (skill brainstorming) : géométrie des fenêtres via `koffi` + Win32, cerveau du chat dans le renderer, clics traversants, besoins énergie/ennui. Détail : `docs/DESIGN_PET.md`.
 - Ollama 0.33.3 et Qwen 3.5 2B opérationnels. Hermes Agent 0.21.2 installé et relié au modèle local ; premier échange intégré réussi. Le 2026-09-14, appels d'outils validés en exécution réelle (file, terminal, vision), chaînes courtes d'outils réussies (chemins absolus) et garde-fous d'approbation vérifiés en dry-run ; RAM minimale observée ~1,4 Go libres avec modèle chargé et Hermes actif. DeepSeek non activé.
 - Design du pet validé le 2026-09-14 : `docs/DESIGN_PET.md` (chat autonome, Electron + TypeScript, démarrage désactivable).
 - Socle documentaire publié sur https://github.com/kinowill/Mini (`main`, commit initial `043bc53`) ; synchronisation vérifiée, preuves dans `VALIDATION_LOG.md`.
@@ -23,6 +25,10 @@ L'identité, la mémoire et les procédures doivent persister quand le modèle c
 - Piste exprimée le 2026-09-13 : API DeepSeek pour les tâches complexes et petit modèle local fluide sur le PC actuel. Compatibilité, performances et coûts non vérifiés. DeepSeek reste désactivé.
 - Décision 2026-09-14 : un seul pet, un chat, vrai pet de bureau flottant, moteur Electron + TypeScript, architecture trois couches (Hermes → Pet Controller → moteur), vie autonome sans IA. Détail et journal des décisions : `docs/DESIGN_PET.md`.
 - Exigence retenue : le pet devra pouvoir démarrer silencieusement avec Windows et ce démarrage devra être désactivable.
+- Décisions 2026-09-16 : le chat va partout, y compris sur la fenêtre active ;
+  rythme calme avec phases actives ; clics traversants (sauf sur le corps du
+  chat) ; `koffi` (Win32) pour la géométrie des fenêtres ; cerveau dans le
+  renderer. Journal complet : `docs/DESIGN_PET.md`.
 - Le choix manuel Local / DeepSeek a été proposé par l'assistant, mais n'est pas une décision utilisateur acquise.
 - Aucun routage automatique ni fournisseur distant n'est arrêté.
 
@@ -67,10 +73,12 @@ Il n'existe encore ni migration, ni déploiement, ni publication du pet.
 
 Le pet est conçu (un chat, Electron + TypeScript, design validé). La phase 1
 (fenêtre transparente, idle, marche, drag, gravité, mesure RAM) est codée dans
-`apps/pet` et validée le 2026-09-16. Prochaine phase : environnement Windows
-(barre des tâches, bords, DPI), puis vie féline. Périmètre V1 et phases
-détaillées dans `docs/DESIGN_PET.md` ; la marge RAM sera re-mesurée à chaque
-phase. Le pet se lance avec `npm start` depuis `apps/pet`.
+`apps/pet` et validée le 2026-09-16. Prochain chantier : vie féline + Pet
+Controller (phase 3) — cycles sommeil/veille, toilette, étirements, sauts,
+réactions souris, besoins et décisions. Ensuite l'escalade des fenêtres
+(phase 4). Le contrôle DPI (phase 2) sera fait au passage ; multi-écran au
+backlog. Critères : `ROADMAP.md` ; conception : `docs/DESIGN_PET.md`. Le pet
+se lance avec `npm start` depuis `apps/pet`.
 Qwen 3.5 2B reste un candidat : premier appel 66,36 s (dont 45,21 s de chargement),
 puis 0,38 et 0,27 s ; 32–42 tokens/s, contexte 4096, partage CPU/GPU 37 %/63 %.
 Ces essais courts ne valident ni les tâches longues, ni les outils, ni la mémoire.

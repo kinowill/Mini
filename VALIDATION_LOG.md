@@ -1,5 +1,29 @@
 # Journal de validation — Mini
 
+## 2026-09-16 — Conception vie féline/escalade et halo de visibilité
+
+- Départ : commit `878d4bf`, main propre et aligné sur origin.
+- Skill brainstorming chargée ; arbitrages utilisateur recueillis un par un :
+  vie féline et escalade conçues ensemble (réalisation en deux chantiers) ;
+  le chat va partout, y compris sur la fenêtre active ; rythme calme avec
+  phases actives (~60/40) ; un seul écran confirmé ; clics traversants sauf
+  sur le corps du chat ; `koffi` (Win32, géométrie seule) ; cerveau du chat
+  dans le renderer. Journal des décisions et conception complets :
+  `docs/DESIGN_PET.md`, sections « Vie féline et escalade ».
+- Halo de visibilité : silhouette blanche floutée précalculée derrière chaque
+  frame (`renderer.ts`), pour que le chat noir soit lisible sur fond noir.
+  Typecheck et build passent ; relance sans erreur console ; l'utilisateur a
+  confirmé visuellement que le chat est « bien visible » sur son wallpaper
+  noir.
+- Documents mis à jour : `docs/DESIGN_PET.md` (périmètre V1, ordre de
+  construction, conception, risques), `ROADMAP.md` (phases renumérotées,
+  chantiers vie féline et escalade), `MASTER.md` (décisions, prochain
+  chantier), présent journal.
+- États : repo modifié (code halo + documentation, commits séparés) ;
+  validation réelle effectuée (halo observé par l'utilisateur) ; la vie
+  féline et l'escalade sont conçues mais pas encore codées ni testées ;
+  production applicative non applicable.
+
 ## 2026-09-16 — Pet phase 1 : lancement, correction et validation
 
 - Départ : commit `61dab0b`, main propre et aligné sur origin. Découverte d'un
