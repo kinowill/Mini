@@ -1,5 +1,37 @@
 # Journal de validation — Mini
 
+## 2026-09-16 — Pet phase 3 : vie féline et Pet Controller
+
+- Départ : commit `c557465`, main propre et aligné sur origin.
+- Implémentation dans `renderer.ts` : machine à états (idle, sit, loaf,
+  sleep, groom, stretch, walk, run, catflip, confused, landing, curious,
+  scared, fall, grabbed), besoins énergie/ennui, décisions pondérées toutes
+  les 3-10 s, cycles sommeil → réveil → étirement → toilette.
+- Réactions souris : curiosité (survol immobile 1,2 s → touche le curseur) ;
+  effroi sur mouvement > 1 400 px/s → sursaut puis fuite d'un bond.
+  Bug corrigé en séance : le survol était compté via les événements de
+  mouvement ; un curseur immobile ne déclenchait rien. Remplacé par un chrono
+  sur entrée/sortie de la fenêtre du chat.
+- Chute : accélération exponentielle g = 120·e^(3,2t) (plafond 3 200 px/s)
+  après plusieurs réglages arbitrés par l'utilisateur ; preuve chiffrée par
+  journalisation temporaire des positions (vitesse finale ~166× la vitesse
+  initiale), instrumentation retirée du code ensuite.
+- Arbitrages utilisateur : saut autonome retiré (perçu comme boucle de
+  petits sauts), creusage (dig) retiré (rendu ambigu) ; actions ajoutées :
+  boule (loaf), course (run), roulade (catflip), perplexe (confused),
+  atterrissage (landing).
+- Performance : halo et sprite précomposés par frame au chargement ; redessin
+  uniquement quand la frame affichée change ; CPU mesuré 42,9 % → 4 % d'un
+  cœur (moyenne sur 30 s) ; RAM ~320 Mo pour 4 processus.
+- Validation : comportements confirmés visuellement par l'utilisateur
+  (marche, assis, sommeil, toilette, étirement, boule, course, atterrissage,
+  interactions souris, chute exponentielle) ; non-régression phase 1 (drag,
+  marche, gravité, halo de visibilité) ; build et typecheck passent.
+- Documents mis à jour : `MASTER.md`, `ROADMAP.md`, `docs/DESIGN_PET.md`,
+  présent journal.
+- États : repo modifié (code + documentation, commits séparés) ; validation
+  réelle effectuée ; production applicative non applicable.
+
 ## 2026-09-16 — Conception vie féline/escalade et halo de visibilité
 
 - Départ : commit `878d4bf`, main propre et aligné sur origin.

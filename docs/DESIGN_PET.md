@@ -170,10 +170,13 @@ Conçue avec l'utilisateur (skill brainstorming), avant tout code.
 - **Plateformes (renderer)** : le sol (workArea/barre des tâches) + le bord
   supérieur de chaque fenêtre (le chat s'y tient « posé dessus ») + les
   côtés des fenêtres pour grimper (`climb_side`, `wall`, `climb_front`).
-- **États** : `idle`, `sleep` (couché puis assoupi), `groom` (toilette),
-  `stretch` (étirement), `walk` (sol ou bord de fenêtre), `jump`, `climb`,
-  `curious`/`scared` (réactions souris), `grabbed`, `fall`. Toutes les
-  animations existent dans le pack.
+- **États** : `idle`, `sit`, `loaf` (boule), `sleep` (couché puis assoupi),
+  `groom` (toilette), `stretch` (étirement/bâillement au réveil), `walk`,
+  `run` (ennui élevé), `catflip` (roulade), `confused` (perplexe), `landing`
+  (après chute), `curious`/`scared` (réactions souris), `fall`, `grabbed`.
+  Saut autonome retiré (arbitré 2026-09-16) : `jump` ne sert plus qu'à la
+  fuite effrayée. `dig` retiré (arbitré 2026-09-16, rendu ambigu).
+  `climb` reste pour l'escalade (chantier B).
 - **Besoins** (0-100, invisibles) : `énergie` (baisse en marchant/grimpant,
   remonte en dormant), `ennui` (monte avec le temps, baisse en explorant).
 - **Boucle de décision** : toutes les 3-10 s, choix pondéré par les besoins ;
@@ -189,6 +192,19 @@ Conçue avec l'utilisateur (skill brainstorming), avant tout code.
   y marche comme ailleurs ; plein écran exclusif (jeux) → Windows le recouvre,
   il réapparaît ensuite. Rien de spécial à coder.
 - Barre des tâches auto-masquée : le workArea change, le sol suit.
+
+### Réglages validés en séance (2026-09-16)
+
+- Chute : accélération exponentielle, g = 120·e^(3,2t), vitesse plafonnée à
+  3 200 px/s ; atterrissage animé (`landing`) après chaque chute. La chute
+  démarre lentement puis plonge ; preuve chiffrée conservée dans le journal
+  de validation.
+- Réactions souris : curiosité après 1,2 s de survol immobile du chat
+  (chrono d'entrée/sortie de la fenêtre, un curseur immobile compte aussi) ;
+  effroi sur mouvement rapide (> 1 400 px/s) puis fuite d'un bond.
+- Perf : halo et sprite précomposés par frame au chargement ; redessin
+  uniquement quand la frame affichée change ; mesuré : ~4 % d'un cœur de CPU
+  en moyenne, ~320 Mo de RAM pour 4 processus.
 
 ### Perf, confidentialité et sécurité
 
@@ -241,6 +257,8 @@ Conçue avec l'utilisateur (skill brainstorming), avant tout code.
   backlog, la netteté du pixel art selon le DPI reste à vérifier.
 - Consommation RAM réelle d'Electron sur cette machine : mesurée en phase 1
   (~300 Mo pour le pet seul, ~2,3 Go libres restants sur cette machine).
+  CPU mesuré en phase 3 : ~4 % d'un cœur (dessin limité aux changements de
+  frame, halo précomposé).
 - Chat noir sur fond sombre : résolu le 2026-09-16 par un halo lumineux
   (silhouette blanche floutée), validé visuellement par l'utilisateur sur
   son wallpaper noir.

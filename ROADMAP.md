@@ -32,7 +32,7 @@ affiche les états de Hermes, avec démarrage Windows silencieux et désactivabl
 - [x] Pet phase 1 : fenêtre transparente, idle, marche, drag, gravité ; mesure RAM.
 - [x] Halo de visibilité du sprite sur fond sombre (validé 2026-09-16).
 - [ ] Pet phase 2 : vérifier le rendu DPI (netteté du pixel art) ; multi-écran repoussé au backlog (un seul écran confirmé).
-- [ ] Pet phase 3 : vie féline + Pet Controller (sommeil, toilette, étirements, sauts, réactions souris, besoins énergie/ennui, décisions pondérées).
+- [x] Pet phase 3 : vie féline + Pet Controller (sommeil, toilette, étirements, sauts, réactions souris, besoins énergie/ennui, décisions pondérées).
 - [ ] Pet phase 4 : escalade des fenêtres (veilleur Win32 koffi, bords supérieurs et côtés, sauts entre fenêtres, suivi/chute, clics traversants).
 - [ ] Pet phase 5 : câblage Hermes (protocole d'événements, états affichés).
 - [ ] Pet phase 6 : menu tray, démarrage Windows silencieux et désactivable.
@@ -167,6 +167,27 @@ Exécuté le 2026-09-16, preuves et détails dans `VALIDATION_LOG.md` ; code dan
   réactions souris observés ; RAM et CPU mesurés (chat endormi et actif) ;
   non-régression phase 1 confirmée par l'utilisateur. Détail de conception :
   `docs/DESIGN_PET.md`.
+
+## Chantier — Vie féline + Pet Controller — résultats
+
+Exécuté le 2026-09-16, validation visuelle par l'utilisateur, preuves dans
+`VALIDATION_LOG.md`.
+- États autonomes observés : marche, assis, boule (loaf), sommeil (couché →
+  assoupi), réveil en s'étirant, toilette, course quand l'ennui est élevé,
+  roulade, perplexe, atterrissage après chute.
+- Réactions souris validées : curiosité (survol immobile ~1,2 s → touche le
+  curseur) ; effroi + fuite d'un bond (passage rapide du curseur).
+- Chute exponentielle validée (g = 120·e^(3,2t), plafond 3 200 px/s) :
+  départ lent puis plongeon, avec atterrissage animé.
+- Arbitrages utilisateur en séance : saut autonome retiré (boucle de petits
+  sauts perçue), creusage (dig) retiré (rendu ambigu).
+- Bug corrigé : le survol était compté via les événements de mouvement de
+  souris ; un curseur immobile ne déclenchait rien. Remplacé par un chrono
+  d'entrée/sortie de la fenêtre du chat.
+- Performance : halo et sprite précomposés au chargement, redessin uniquement
+  quand la frame change ; CPU mesuré 42,9 % → 4 % d'un cœur, RAM ~320 Mo.
+- Non-régression : marche, drag, gravité et halo de visibilité toujours OK ;
+  build et typecheck passent.
 
 ## Chantier — Escalade des fenêtres — critères
 
