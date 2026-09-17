@@ -1,5 +1,34 @@
 # Journal de validation — Mini
 
+## 2026-09-17 — Correction de la grimpe (état run cul-de-sac) et précision DWM
+
+- Départ : commit `7bfbf7c`, main propre et alignée sur origin.
+- Symptôme : le chat ne grimpait jamais (observation utilisateur : il restait au
+  sol, aucun comportement d'escalade).
+- Diagnostic par instrumentation (logs renderer + veilleur, retirés ensuite) :
+  l'état `run` était un cul-de-sac — aucune durée et absent de la liste des
+  états re-décidés périodiquement (idle/walk/sit). Le chat a choisi `run` une
+  fois (~1 % de chance) puis a couru en boucle (360+ s observés) : l'ennui
+  reste à 0 (drainé à -3/s par la course), donc la grimpe (ennui > 65) ne
+  pouvait jamais se déclencher. Le veilleur Win32, lui, fonctionnait
+  (2-3 fenêtres détectées).
+- Correction 1 : `run` ajouté aux états re-décidables. Vérifié par logs :
+  ennui 25 → 70 en ~60 s, plan de grimpe lancé sur une vraie fenêtre, cycle
+  complet approche → grimpe → marche sur le bord.
+- Symptôme 2 (observation utilisateur) : le chat grimpait « un peu loin » de
+  la fenêtre. Cause : `GetWindowRect` inclut les bordures invisibles DWM.
+  Correction : `DwmGetWindowAttribute` avec `DWMWA_EXTENDED_FRAME_BOUNDS`
+  (bornes visibles exactes), fallback `GetWindowRect`. Preuve log : rect
+  `[1158,497,313,1009]` → `[1165,497,299,1002]` (7 px de bordure retirés de
+  chaque côté).
+- Validation utilisateur : grimpe complète observée ; chute quand la fenêtre
+  est fermée pendant la grimpe (comportement attendu de phase 4) ; le chat
+  vit sa vie normalement sur les bords.
+- Reste à re-observer sur la durée : sauts fenêtre → fenêtre, hop vers le
+  sol, suivi d'une fenêtre déplacée.
+- États : repo modifié (code, non committé) ; validation réelle effectuée
+  (observations utilisateur + logs) ; production applicative non applicable.
+
 ## 2026-09-16 — Réglages d'escalade (fin de session)
 
 - Départ : commit `02a50fc`, main propre.

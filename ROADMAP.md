@@ -225,6 +225,21 @@ Exécuté le 2026-09-16, validation visuelle par l'utilisateur, preuves dans
   fréquentes (ennui > 65, 50 %), saut fenêtre → fenêtre 50 %, hop vers le
   sol depuis un bord (30 %).
 
+## Chantier — Correction de la grimpe — résultats
+
+Exécuté le 2026-09-17, détails et preuves dans `VALIDATION_LOG.md`.
+- Cause racine de la grimpe jamais déclenchée : l'état `run` était un
+  cul-de-sac (pas de durée, absent des états re-décidés) ; le chat courait
+  en boucle, ennui bloqué à 0. `run` est désormais re-décidable.
+- Cause du décalage visuel : `GetWindowRect` inclut les bordures invisibles
+  DWM (~7 px). Remplacé par `DWMWA_EXTENDED_FRAME_BOUNDS` (fallback
+  conservé).
+- Validé visuellement par l'utilisateur : grimpe complète (approche →
+  grimpe → marche sur le bord), chute à la fermeture pendant la grimpe.
+- Reste à re-observer sur la durée : sauts fenêtre → fenêtre, hop vers le
+  sol, suivi d'une fenêtre déplacée.
+- Build et typecheck passent ; instrumentation de diagnostic retirée.
+
 ## Chantier — vérification des références et licences — critères
 
 - Résultat attendu : pour chacune des quatre références GitHub citées par le
