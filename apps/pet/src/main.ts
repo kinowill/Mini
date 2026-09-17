@@ -115,15 +115,19 @@ function startWindowWatcher(): void {
   watcher = setInterval(() => {
     void (async () => {
       if (!win || win.isDestroyed()) return;
-      const scale = screen.getPrimaryDisplay().scaleFactor;
-      const rects = await enumerateVisibleWindows(selfPid);
-      const scaled = rects.map((r) => ({
-        x: r.x / scale,
-        y: r.y / scale,
-        width: r.width / scale,
-        height: r.height / scale,
-      }));
-      win?.webContents.send("windows:update", scaled);
+      try {
+        const scale = screen.getPrimaryDisplay().scaleFactor;
+        const rects = await enumerateVisibleWindows(selfPid);
+        const scaled = rects.map((r) => ({
+          x: r.x / scale,
+          y: r.y / scale,
+          width: r.width / scale,
+          height: r.height / scale,
+        }));
+        win?.webContents.send("windows:update", scaled);
+      } catch (err) {
+        console.error("[main] watcher error", err);
+      }
     })();
   }, WINDOWS_POLL_MS);
 }

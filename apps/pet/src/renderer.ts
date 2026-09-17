@@ -782,7 +782,10 @@ class Pet {
     if (this.nextDecision <= 0) {
       if (
         !this.plan &&
-        (this.state === "idle" || this.state === "walk" || this.state === "sit")
+        (this.state === "idle" ||
+          this.state === "walk" ||
+          this.state === "run" ||
+          this.state === "sit")
       ) {
         this.decide();
       }

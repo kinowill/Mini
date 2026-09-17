@@ -10,6 +10,7 @@ type Win32Func = (...args: unknown[]) => unknown;
 const GWL_EXSTYLE = -20;
 const WS_EX_TOOLWINDOW = 0x00000080;
 const DWMWA_CLOAKED = 14;
+const DWMWA_EXTENDED_FRAME_BOUNDS = 9;
 
 let EnumWindows: Win32Func | null = null;
 let IsWindowVisible: Win32Func | null = null;
@@ -18,6 +19,7 @@ let GetWindowRect: Win32Func | null = null;
 let GetWindowThreadProcessId: Win32Func | null = null;
 let GetWindowLongPtrW: Win32Func | null = null;
 let DwmGetWindowAttribute: Win32Func | null = null;
+let DwmGetWindowAttributeRect: Win32Func | null = null;
 
 let currentSelfPid = 0;
 let collected: WindowRect[] = [];
@@ -50,6 +52,9 @@ async function ensureLoaded(): Promise<void> {
   DwmGetWindowAttribute = dwmapi.func(
     "int __stdcall DwmGetWindowAttribute(HWND hwnd, uint32 dwAttribute, _Out_ uint32 *pvAttribute, uint32 cbAttribute)"
   );
+  DwmGetWindowAttributeRect = dwmapi.func(
+    "int __stdcall DwmGetWindowAttribute(HWND hwnd, uint32 dwAttribute, _Out_ RECT *pvAttribute, uint32 cbAttribute)"
+  );
 
   const WNDENUMPROC = koffi.proto("int __stdcall WNDENUMPROC(HWND hwnd, intptr_t lParam)");
   enumCallback = koffi.register((hwnd: unknown) => {
@@ -70,13 +75,17 @@ async function ensureLoaded(): Promise<void> {
         right: number;
         bottom: number;
       } | null> = [null];
-      const ok = GetWindowRect?.(hwnd, rectOut);
-      const rect = rectOut[0];
-      if (!ok || !rect) return 1;
-      const width = rect.right - rect.left;
-      const height = rect.bottom - rect.top;
+      const hrRect = DwmGetWindowAttributeRect?.(hwnd, DWMWA_EXTENDED_FRAME_BOUNDS, rectOut, 16);
+      const rect = hrRect === 0 && rectOut[0] ? rectOut[0] : null;
+      if (!rect) {
+        const ok = GetWindowRect?.(hwnd, rectOut);
+        if (!ok || !rectOut[0]) return 1;
+      }
+      const r = rect ?? rectOut[0]!;
+      const width = r.right - r.left;
+      const height = r.bottom - r.top;
       if (width <= 0 || height <= 0) return 1;
-      collected.push({ x: rect.left, y: rect.top, width, height });
+      collected.push({ x: r.left, y: r.top, width, height });
     } catch {
       // window state changed mid-enumeration; skip it
     }
